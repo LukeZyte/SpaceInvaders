@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "MainMenu.h"
 #include "Player.h"
+#include "GraphicalObject.h"
 #include "Level.h"
 #include "Bullet.h"
 
@@ -32,6 +33,7 @@ private:
 	// Inits
 	sf::RenderWindow& window;
 	MainMenu mainMenu{ window };
+	//GraphicalObject* player = new Player(&window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 60.f));
 	Player player{ &window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 60.f) };
 	Level level{ window };
 

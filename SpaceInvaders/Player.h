@@ -14,6 +14,11 @@ public:
 	Player(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition);//, std::vector<Bullet>& _bulletsVec);
 	~Player();
 
+	///
+	void resetPosition();
+	void draw();
+	///
+
 	float getTopBound();
 	sf::Vector2f getRifleBound();
 

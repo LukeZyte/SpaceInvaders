@@ -4,12 +4,25 @@ Player::Player(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f
 	: GraphicalObject(_window, _texturePath, _initPosition)//, bulletsVec(_bulletsVec)
 {
 	std::cout << "Utworzono Player obj!\n";
+	resetPosition();
 }
 
 Player::~Player()
 {
 	std::cout << "Zniszczono Player obj!\n";
 }
+
+///
+void Player::draw()
+{
+	this->window->draw(sprite);
+}
+
+void Player::resetPosition()
+{
+	sprite.setPosition(initPosition.x, initPosition.y);
+}
+///
 
 void Player::movePlayer(sf::Time& dt, bool moveRight)
 {

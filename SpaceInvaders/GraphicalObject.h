@@ -11,8 +11,8 @@ public:
 	GraphicalObject(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition);
 	~GraphicalObject();
 
-	void resetPosition();
-	void draw();
+	virtual void resetPosition() = 0;
+	virtual void draw() = 0;
 
 protected:
 	sf::RenderWindow* window;

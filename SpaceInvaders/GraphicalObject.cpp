@@ -9,7 +9,7 @@ GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texture
 	texture.loadFromFile(_texturePath);
 	sprite.setTexture(texture);
 	
-	resetPosition();
+	//resetPosition();
 }
 
 GraphicalObject::~GraphicalObject()
@@ -17,13 +17,13 @@ GraphicalObject::~GraphicalObject()
 	std::cout << "Zniszczono GraphicalOject obj!\n";
 }
 
-void GraphicalObject::resetPosition()
-{
-	sprite.setPosition(initPosition.x, initPosition.y);
-};
+//void GraphicalObject::resetPosition()
+//{
+//	sprite.setPosition(initPosition.x, initPosition.y);
+//};
 
 
-void GraphicalObject::draw()
-{
-	this->window->draw(sprite);
-}
+//void GraphicalObject::draw()
+//{
+//	this->window->draw(sprite);
+//}
