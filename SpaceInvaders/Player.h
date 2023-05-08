@@ -11,23 +11,21 @@
 class Player : public GraphicalObject
 {
 public:
-	Player(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition);//, std::vector<Bullet>& _bulletsVec);
+	Player(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition);
 	~Player();
 
-	///
 	void resetPosition();
 	void draw();
-	///
-
-	float getTopBound();
+	void moveEntityLeft(sf::Time& dt);
+	void moveEntityRight(sf::Time& dt);
 	sf::Vector2f getRifleBound();
 
-	void movePlayer(sf::Time& dt, bool moveRight);
-	void update(sf::Time& dt);
+	bool collisionCheck(Bullet& bullet);
+	void deathAnimation() {};
+	void toggleTexture() {};
+
 
 private:
 
-	float moveSpeed = 250.f;
+	float moveSpeed = 500.f;
 };
-
-

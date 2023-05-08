@@ -21,5 +21,9 @@ private:
 	sf::Texture texture;
 	sf::Sprite background;
 	sf::Sprite background2;
-	const int bg_move_speed = 200;
+	const int bgMaxSpeed = 400;
+	int bgMoveSpeed = 0;
+	const int acceleration = 1;
+
+	const int transparency = 100;
 };

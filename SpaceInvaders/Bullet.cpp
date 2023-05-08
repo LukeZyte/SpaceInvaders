@@ -37,7 +37,13 @@ bool Bullet::isOutOfBounds()
 		return false;
 }
 
-sf::RectangleShape Bullet::getRect()
+sf::FloatRect Bullet::hitbox()
 {
-	return rect;
+	sf::FloatRect fRect(
+		rect.getGlobalBounds().left,
+		rect.getGlobalBounds().top,
+		rect.getGlobalBounds().width,
+		rect.getGlobalBounds().height
+	);
+	return fRect;
 }

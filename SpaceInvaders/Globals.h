@@ -10,5 +10,8 @@
 
 // Textures
 #define SPACE_BACKGROUND_FILEPATH "resources/img/space_bg.jpg"
-#define PLAYER_MODEL_FILEPATH "resources/img/tank.png"
+#define PLAYER_MODEL_FILEPATH "resources/img/PlayerTexture.png"
 #define BULLET_FILEPATH "resources/img/bullet.png"
+#define ALIENTEXTURE_MODEL_FILEPATH "resources/img/AlienTexture.png"
+#define ALIENTEXUTRE_2_MODEL_FILEPATH "resources/img/AlienTexture2.png"
+#define ENEMY_DEAD_MODEL_FILEPATH "resources/img/AlienDestroyedTexture.png"

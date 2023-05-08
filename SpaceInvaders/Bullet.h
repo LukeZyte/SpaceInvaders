@@ -14,12 +14,15 @@ public:
 
 	void moveBullet(sf::Time& dt);
 	bool isOutOfBounds();
-	sf::RectangleShape getRect();
+	sf::RectangleShape getRectShape() { return rect; }
+
+	sf::FloatRect hitbox();
 
 private:
 	sf::RenderWindow* window;
-	sf::RectangleShape rect{ sf::Vector2f(6, 24)};
+	sf::RectangleShape rect{ sf::Vector2f(3, 32)};
 
-	float bulletSpeed = 500.f;
+
+	float bulletSpeed = 1000.f;
 };
 

@@ -3,7 +3,6 @@
 Game::Game(sf::RenderWindow& _window) 
     : window(_window), gameState("menu")
 {
-    //window.setFramerateLimit(FPS_LIMIT);
     std::cout << "Game window addr: " << &window << "\n";
 
     gameLoop();
@@ -14,20 +13,36 @@ Game::~Game()
     std::cout << "Usunieto instancje MainMenu z Game.h\n";
 }
 
-void Game::draw()
+void Game::draw(sf::Time& dt)
 {
     if (gameState == "menu")
     {
         mainMenu.draw();
-        player.draw();
+        player->draw();
     }
     else if (gameState == "game")
     {
-        player.draw();
+        clocksHandler();
+
+        level.draw();
+        level.moveBackgorund(dt);
+        player->draw();
+        drawEnemies();
+        checkCollisions();
     }
-    //level.draw();
-    //player.draw();
-    //mainMenu.draw();
+}
+
+void Game::clocksHandler()
+{
+    //std::cout << enemiesAnimationClock.getElapsedTime().asSeconds() << " clocksHandler inited!\n";
+    if (enemiesAnimationClock.getElapsedTime().asSeconds() > enemiesAnimationTimer)
+    {
+        enemiesAnimationClock.restart();
+        animateAliens();
+    }
+    else {
+
+    }
 }
 
 void Game::gameLoop()
@@ -53,15 +68,16 @@ void Game::gameLoop()
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "menu")
         {
+            initGame();
             gameState = "game";
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && gameState == "game") {
-            player.movePlayer(dt, false);
+            player->moveEntityLeft(dt);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && gameState == "game") {
-            player.movePlayer(dt, true);
+            player->moveEntityRight(dt);
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "game") {
@@ -73,28 +89,34 @@ void Game::gameLoop()
         }
 
         window.clear();
-        std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
-        //mainMenu.draw();
-        //level.moveBackgorund(dt);
-        //erasePlayerShots();
 
         erasePlayerShots();
-
+        level.draw();
+        draw(dt);
         for (auto& bullet : playerBulletsVec)
         {
-            //window.draw(bullet.getRect());
             bullet.draw();
             bullet.moveBullet(dt);
         }
-        draw();
         window.display();
+    }
+}
+
+void Game::initGame()
+{
+    for (int i = 100; i < WINDOW_WIDTH - 100; i = i + 120)
+    {
+        GraphicalObject* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(i, 200.f));
+        enemiesVec.push_back(enemy);
     }
 }
 
 void Game::playerShots()
 {
-    Bullet bullet(&window, player.getRifleBound());
+    Bullet bullet(&window, player->getRifleBound());
     playerBulletsVec.push_back(bullet);
+
+    std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
 }
 
 void Game::erasePlayerShots()
@@ -104,7 +126,46 @@ void Game::erasePlayerShots()
         if (playerBulletsVec[i].isOutOfBounds())
         {
             playerBulletsVec.erase(playerBulletsVec.begin() + i);
+            std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
             break;
         }
+    }
+}
+
+void Game::drawEnemies()
+{
+    for (auto& enemy : enemiesVec)
+    {
+        enemy->draw();
+    }
+}
+
+void Game::checkCollisions()
+{
+    for (int ie = 0; ie < enemiesVec.size(); ie++)
+    {
+        for (int ib = 0; ib < playerBulletsVec.size(); ib++)
+        {
+            if (enemiesVec[ie]->collisionCheck(playerBulletsVec[ib]))
+            {
+                std::cout << "enemiesVecSize: " << enemiesVec.size() << std::endl;
+                playerBulletsVec.erase(playerBulletsVec.begin() + ib);
+                enemiesVec.erase(enemiesVec.begin() + ie);
+            }
+        }
+    }
+}
+
+void Game::deleteDeadBodies()
+{
+
+}
+
+void Game::animateAliens()
+{
+    std::cout << "Change!\n";
+    for (int i = 0; i < enemiesVec.size(); i++)
+    {
+        enemiesVec[i]->toggleTexture();
     }
 }
