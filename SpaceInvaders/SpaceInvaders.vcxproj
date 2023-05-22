@@ -150,7 +150,9 @@
     <ClCompile Include="AlienSoldier.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Gameover.cpp" />
     <ClCompile Include="GraphicalObject.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -161,7 +163,9 @@
     <ClInclude Include="AlienSoldier.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Gameover.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GraphicalObject.h" />
     <ClInclude Include="Level.h" />

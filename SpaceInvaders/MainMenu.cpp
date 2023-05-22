@@ -4,13 +4,6 @@ MainMenu::MainMenu(sf::RenderWindow& _window) : window(_window)
 {
 	std::cout << "Utworzono MainMenu obj!\n";
 
-	// Background Init
-	//texture.loadFromFile(SPACE_BACKGROUND_FILEPATH);
-	//texture.setRepeated(true);
-	//background.setTexture(texture);
-	//background.setTextureRect(sf::Rect(0, 0, WINDOW_WIDTH, WINDOW_WIDTH ));
-
-
 	// Title Init
 	if (!titleFont.loadFromFile(PIXELOIDSANS_FILEPATH))
 		std::cout << "Could not load a font file!\n";
@@ -48,7 +41,7 @@ void MainMenu::draw()
 	{
 		if (playTextClock.getElapsedTime().asSeconds() > textOnTime)
 		{
-			playText.setCharacterSize(0);
+			playText.setPosition(sf::Vector2f{ -100, -100 });
 			playTextVisible = !playTextVisible;
 			playTextClock.restart();
 		}
@@ -57,7 +50,7 @@ void MainMenu::draw()
 	{
 		if (playTextClock.getElapsedTime().asSeconds() > textOffTime)
 		{
-			playText.setCharacterSize(24);
+			playText.setPosition((WINDOW_WIDTH / 2) - (playText.getGlobalBounds().width / 2), WINDOW_HEIGHT - 300.f);
 			playTextVisible = !playTextVisible;
 			playTextClock.restart();
 		}

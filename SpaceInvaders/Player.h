@@ -18,7 +18,7 @@ public:
 	void draw();
 	void moveEntityLeft(sf::Time& dt);
 	void moveEntityRight(sf::Time& dt);
-	void moveEntity(sf::Time& dt, bool goUp) {};
+	void moveEntity(sf::Time& dt) {};
 	sf::Vector2f getRifleBound();
 
 	bool collisionCheck(GraphicalObject* bullet);

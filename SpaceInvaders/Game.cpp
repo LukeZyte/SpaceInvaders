@@ -10,7 +10,7 @@ Game::Game(sf::RenderWindow& _window)
 
 Game::~Game()
 {
-    std::cout << "Usunieto instancje MainMenu z Game.h\n";
+    std::cout << "Usunieto instancje Game z Game.h\n";
 }
 
 void Game::draw(sf::Time& dt)
@@ -25,10 +25,37 @@ void Game::draw(sf::Time& dt)
         clocksHandler();
 
         level.draw();
-        level.moveBackgorund(dt);
         player->draw();
         drawEnemies();
+        alienShots();
         checkCollisions();
+    }
+    else if (gameState == "gameover")
+    {
+        level.draw();
+        player->draw();
+        drawEnemies();
+        alienShots();
+        checkCollisions();
+        gameover.draw();
+    }
+}
+
+void Game::moveElements(sf::Time& dt)
+{
+    if (!lockMovement)
+    {
+        level.moveBackgorund(dt);
+        for (auto& bullet : playerBulletsVec)
+        {
+            bullet->draw();
+            bullet->moveEntity(dt);
+        }
+        for (auto& bullet : enemyBulletsVec)
+        {
+            bullet->draw();
+            bullet->moveEntity(dt);
+        }
     }
 }
 
@@ -73,19 +100,27 @@ void Game::gameLoop()
             gameState = "game";
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && gameState == "game") {
-            player->moveEntityLeft(dt);
-        }
+        if (!lockMovement)
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && gameState == "game") {
+                player->moveEntityLeft(dt);
+            }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && gameState == "game") {
-            player->moveEntityRight(dt);
-        }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && gameState == "game") {
+                player->moveEntityRight(dt);
+            }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "game") {
-            if (reloadClock.getElapsedTime().asSeconds() > reloadTime)
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "game") {
+                if (reloadClock.getElapsedTime().asSeconds() > reloadTime)
+                {
+                    playerShots();
+                    reloadClock.restart();
+                }
+            }
+
+            if (gameState == "gameover")
             {
-                playerShots();
-                reloadClock.restart();
+
             }
         }
 
@@ -94,11 +129,8 @@ void Game::gameLoop()
         erasePlayerShots();
         level.draw();
         draw(dt);
-        for (auto& bullet : playerBulletsVec)
-        {
-            bullet->draw();
-            bullet->moveEntity(dt, true);
-        }
+        moveElements(dt);
+
         window.display();
     }
 }
@@ -107,13 +139,11 @@ void Game::initGame()
 {
     for (int i = 50; i <= 350; i = i + 70)
     {
-        std::vector<GraphicalObject*> enemyLineVec;
         for (int j = 150; j < WINDOW_WIDTH - 150; j = j + 100)
         {
             GraphicalObject* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(j, i));
-            enemyLineVec.push_back(enemy);
+            enemiesVec.push_back(enemy);
         }
-        enemiesVec.push_back(enemyLineVec);
     }
 }
 
@@ -140,32 +170,39 @@ void Game::erasePlayerShots()
 
 void Game::drawEnemies()
 {
-    for (auto& enemyLineVec : enemiesVec)
+    for (auto& enemy : enemiesVec)
     {
-        for (auto& enemy : enemyLineVec)
-        {
-            enemy->draw();
-        }
+        enemy->draw();
     }
 }
 
 void Game::checkCollisions()
 {
-    for (int iel = 0; iel < enemiesVec.size(); iel++)
+    // Bullet <=> Enemy
+    for (int ie = 0; ie < enemiesVec.size(); ie++)
     {
-        for (int ie = 0; ie < enemiesVec[iel].size(); ie++)
+        for (int ib = 0; ib < playerBulletsVec.size(); ib++)
         {
-            for (int ib = 0; ib < playerBulletsVec.size(); ib++)
+            if (enemiesVec[ie]->collisionCheck(playerBulletsVec[ib]))
             {
-                if (enemiesVec[iel][ie]->collisionCheck(playerBulletsVec[ib]))
-                {
-                    std::cout << "enemiesVecSize: " << enemiesVec[0].size() + enemiesVec[1].size() + enemiesVec[2].size() + enemiesVec[3].size() + enemiesVec[4].size() << std::endl;
-                    playerBulletsVec.erase(playerBulletsVec.begin() + ib);
-                    enemiesVec[iel].erase(enemiesVec[iel].begin() + ie);
-                }
+                std::cout << "enemiesVecSize: " << enemiesVec.size() << std::endl;
+                playerBulletsVec.erase(playerBulletsVec.begin() + ib);
+                enemiesVec.erase(enemiesVec.begin() + ie);
             }
         }
     }
+
+    // Bullet <=> Player
+    for (int ie = 0; ie < enemyBulletsVec.size(); ie++)
+    {
+        if (player->collisionCheck(enemyBulletsVec[ie]))
+        {
+            enemyBulletsVec[ie]->draw();
+            lockMovement = true;
+            gameState = "gameover";
+        }
+    }
+
 }
 
 void Game::deleteDeadBodies()
@@ -175,12 +212,9 @@ void Game::deleteDeadBodies()
 
 void Game::animateAliens()
 {
-    for (auto& enemyLineVec : enemiesVec)
+    for (auto& enemy : enemiesVec)
     {
-        for (auto& enemy : enemyLineVec)
-        {
-            enemy->toggleTexture();
-        }
+        enemy->toggleTexture();
     }
 }
 
@@ -190,5 +224,21 @@ void Game::animateBullets()
     for (int i = 0; i < playerBulletsVec.size(); i++)
     {
         playerBulletsVec[i]->toggleTexture();
+    }
+}
+
+void Game::alienShots()
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<std::mt19937::result_type> distance(0, enemiesVec.size());
+    GraphicalObject* randomAlien = enemiesVec[distance(gen)];
+
+    // Alien shots
+    if (enemyReloadClock.getElapsedTime().asSeconds() > enemyReloadTime)
+    {
+        GraphicalObject* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, randomAlien->getRifleBound());
+        enemyBulletsVec.push_back(bullet);
+        enemyReloadClock.restart();
     }
 }

@@ -14,20 +14,10 @@ Bullet::~Bullet()
 	std::cout << "Zniszczono Bullet obj\n";
 }
 
-void Bullet::moveEntity(sf::Time& dt, bool goUp)
+void Bullet::moveEntity(sf::Time& dt)
 {
-	if (goUp)
+	if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height > 0)
 	{
-		if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height > 0)
-		{
-			sprite.move(0.0f, -bulletSpeed * dt.asSeconds());
-		}
-	}
-	else
-	{
-		if (sprite.getGlobalBounds().top < WINDOW_HEIGHT)
-		{
-			sprite.move(0.0f, bulletSpeed * dt.asSeconds());
-		}
+		sprite.move(0.0f, -bulletSpeed * dt.asSeconds());
 	}
 }

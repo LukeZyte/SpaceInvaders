@@ -14,7 +14,7 @@ public:
 
 	//void draw();
 
-	void moveEntity(sf::Time& dt, bool goUp);
+	void moveEntity(sf::Time& dt);
 	//bool isOutOfBounds();
 	//sf::RectangleShape getRectShape() { return rect; }
 

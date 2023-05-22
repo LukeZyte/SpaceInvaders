@@ -46,5 +46,9 @@ sf::Vector2f Player::getRifleBound()
 
 bool Player::collisionCheck(GraphicalObject* bullet)
 {
+	if (hitbox().intersects(bullet->hitbox()))
+	{
+		return true;
+	}
 	return false;
 }

@@ -16,3 +16,5 @@
 #define ALIENTEXTURE_MODEL_FILEPATH "resources/img/AlienTexture.png"
 #define ALIENTEXUTRE_2_MODEL_FILEPATH "resources/img/AlienTexture2.png"
 #define ENEMY_DEAD_MODEL_FILEPATH "resources/img/AlienDestroyedTexture.png"
+#define ENEMYBULLET_FILEPATH "resources/img/enemyBullet.png"
+#define ENEMYBULLET_LIGHT_FILEPATH "resources/img/enemyBullet2.png"
