@@ -15,15 +15,16 @@ public:
 	Enemy(sf::RenderWindow* _window, std::string _texturePath, std::string _texturePath2, sf::Vector2f _initPosition);
 	~Enemy();
 
-	void resetPosition();
-	void draw();
+	//void resetPosition();
+	//void draw();
 	void moveEntityLeft(sf::Time& dt) {};
 	void moveEntityRight(sf::Time& dt) {};
+	void moveEntity(sf::Time& dt, bool goUp) {};
 	sf::Vector2f getRifleBound();
 
-	bool collisionCheck(Bullet& bullet);
+	bool collisionCheck(GraphicalObject* bullet);
 	void deathAnimation();
-	void toggleTexture();
+	//void toggleTexture();
 
 private:
 

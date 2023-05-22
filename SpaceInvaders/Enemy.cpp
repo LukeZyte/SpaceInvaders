@@ -24,19 +24,10 @@ void Enemy::deathAnimation()
 	sprite.setTexture(deathTexture);
 }
 
-void Enemy::draw()
-{
-	this->window->draw(sprite);
-}
 
-void Enemy::resetPosition()
+bool Enemy::collisionCheck(GraphicalObject* bullet)
 {
-	sprite.setPosition(initPosition.x, initPosition.y);
-}
-
-bool Enemy::collisionCheck(Bullet& bullet)
-{
-	if (hitbox().intersects(bullet.hitbox()))
+	if (hitbox().intersects(bullet->hitbox()))
 	{
 		return true;
 	}
@@ -45,22 +36,7 @@ bool Enemy::collisionCheck(Bullet& bullet)
 
 sf::Vector2f Enemy::getRifleBound()
 {
-	sf::Vector2f vec(sprite.getGlobalBounds().left + (sprite.getGlobalBounds().width / 2), sprite.getGlobalBounds().top);
+	sf::Vector2f vec(sprite.getGlobalBounds().left + (sprite.getGlobalBounds().width / 2), sprite.getGlobalBounds().top + sprite.getGlobalBounds().height);
 	return vec;
 };
 
-void Enemy::toggleTexture()
-{
-	if (textureFrameIndex == 0)
-	{
-		getSprite()->setTexture(textures[1]);
-		setTextureFrameIndex(1);
-		std::cout << "\nZMIENIONO TEKSTURE NA 1\n";
-	}
-	else
-	{
-		getSprite()->setTexture(textures[0]);
-		setTextureFrameIndex(0);
-		std::cout << "\nZMIENIONO TEKSTURE NA 0\n";
-	}
-}

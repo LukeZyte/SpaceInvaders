@@ -44,7 +44,7 @@ sf::Vector2f Player::getRifleBound()
 	return vec;
 };
 
-bool Player::collisionCheck(Bullet& bullet)
+bool Player::collisionCheck(GraphicalObject* bullet)
 {
 	return false;
 }

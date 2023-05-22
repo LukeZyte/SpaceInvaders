@@ -34,14 +34,15 @@ void Game::draw(sf::Time& dt)
 
 void Game::clocksHandler()
 {
-    //std::cout << enemiesAnimationClock.getElapsedTime().asSeconds() << " clocksHandler inited!\n";
     if (enemiesAnimationClock.getElapsedTime().asSeconds() > enemiesAnimationTimer)
     {
         enemiesAnimationClock.restart();
         animateAliens();
     }
-    else {
-
+    if (bulletsAnimationClock.getElapsedTime().asSeconds() > bulletsAnimationTimer)
+    {
+        bulletsAnimationClock.restart();
+        animateBullets();
     }
 }
 
@@ -95,8 +96,8 @@ void Game::gameLoop()
         draw(dt);
         for (auto& bullet : playerBulletsVec)
         {
-            bullet.draw();
-            bullet.moveBullet(dt);
+            bullet->draw();
+            bullet->moveEntity(dt, true);
         }
         window.display();
     }
@@ -104,16 +105,21 @@ void Game::gameLoop()
 
 void Game::initGame()
 {
-    for (int i = 100; i < WINDOW_WIDTH - 100; i = i + 120)
+    for (int i = 50; i <= 350; i = i + 70)
     {
-        GraphicalObject* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(i, 200.f));
-        enemiesVec.push_back(enemy);
+        std::vector<GraphicalObject*> enemyLineVec;
+        for (int j = 150; j < WINDOW_WIDTH - 150; j = j + 100)
+        {
+            GraphicalObject* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(j, i));
+            enemyLineVec.push_back(enemy);
+        }
+        enemiesVec.push_back(enemyLineVec);
     }
 }
 
 void Game::playerShots()
 {
-    Bullet bullet(&window, player->getRifleBound());
+    GraphicalObject* bullet = new Bullet(&window, BULLET_FILEPATH, BULLET_LIGHT_FILEPATH, player->getRifleBound());
     playerBulletsVec.push_back(bullet);
 
     std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
@@ -123,7 +129,7 @@ void Game::erasePlayerShots()
 {
     for (int i = 0; i < playerBulletsVec.size(); i++)
     {
-        if (playerBulletsVec[i].isOutOfBounds())
+        if (playerBulletsVec[i]->isOutOfBounds())
         {
             playerBulletsVec.erase(playerBulletsVec.begin() + i);
             std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
@@ -134,23 +140,29 @@ void Game::erasePlayerShots()
 
 void Game::drawEnemies()
 {
-    for (auto& enemy : enemiesVec)
+    for (auto& enemyLineVec : enemiesVec)
     {
-        enemy->draw();
+        for (auto& enemy : enemyLineVec)
+        {
+            enemy->draw();
+        }
     }
 }
 
 void Game::checkCollisions()
 {
-    for (int ie = 0; ie < enemiesVec.size(); ie++)
+    for (int iel = 0; iel < enemiesVec.size(); iel++)
     {
-        for (int ib = 0; ib < playerBulletsVec.size(); ib++)
+        for (int ie = 0; ie < enemiesVec[iel].size(); ie++)
         {
-            if (enemiesVec[ie]->collisionCheck(playerBulletsVec[ib]))
+            for (int ib = 0; ib < playerBulletsVec.size(); ib++)
             {
-                std::cout << "enemiesVecSize: " << enemiesVec.size() << std::endl;
-                playerBulletsVec.erase(playerBulletsVec.begin() + ib);
-                enemiesVec.erase(enemiesVec.begin() + ie);
+                if (enemiesVec[iel][ie]->collisionCheck(playerBulletsVec[ib]))
+                {
+                    std::cout << "enemiesVecSize: " << enemiesVec[0].size() + enemiesVec[1].size() + enemiesVec[2].size() + enemiesVec[3].size() + enemiesVec[4].size() << std::endl;
+                    playerBulletsVec.erase(playerBulletsVec.begin() + ib);
+                    enemiesVec[iel].erase(enemiesVec[iel].begin() + ie);
+                }
             }
         }
     }
@@ -163,9 +175,20 @@ void Game::deleteDeadBodies()
 
 void Game::animateAliens()
 {
-    std::cout << "Change!\n";
-    for (int i = 0; i < enemiesVec.size(); i++)
+    for (auto& enemyLineVec : enemiesVec)
     {
-        enemiesVec[i]->toggleTexture();
+        for (auto& enemy : enemyLineVec)
+        {
+            enemy->toggleTexture();
+        }
+    }
+}
+
+void Game::animateBullets()
+{
+    //std::cout << "Change!\n";
+    for (int i = 0; i < playerBulletsVec.size(); i++)
+    {
+        playerBulletsVec[i]->toggleTexture();
     }
 }

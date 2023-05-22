@@ -1,14 +1,12 @@
 #include "Bullet.h"
 
-Bullet::Bullet(sf::RenderWindow* _window, sf::Vector2f _initVec)
-	: window(_window)
+Bullet::Bullet(sf::RenderWindow* _window, std::string _texturePath, std::string _texturePath2, sf::Vector2f _initPosition)
+	: GraphicalObject(_window, _texturePath, _texturePath2, _initPosition)
 {
 	std::cout << "Utworzono Bullet obj!\n";
 
-	// Bullet Init
-	rect.setPosition(_initVec);
-	rect.setFillColor(sf::Color::Yellow);
-	
+	resetPosition();
+	 
 }
 
 Bullet::~Bullet()
@@ -16,34 +14,20 @@ Bullet::~Bullet()
 	std::cout << "Zniszczono Bullet obj\n";
 }
 
-void Bullet::draw()
+void Bullet::moveEntity(sf::Time& dt, bool goUp)
 {
-	this->window->draw(rect);
-}
-
-void Bullet::moveBullet(sf::Time& dt)
-{
-	if (rect.getGlobalBounds().top + rect.getGlobalBounds().height > 0)
+	if (goUp)
 	{
-		rect.move(0.0f, -bulletSpeed * dt.asSeconds());
+		if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height > 0)
+		{
+			sprite.move(0.0f, -bulletSpeed * dt.asSeconds());
+		}
 	}
-}
-
-bool Bullet::isOutOfBounds()
-{
-	if (rect.getGlobalBounds().top + rect.getGlobalBounds().height < 0)
-		return true;
-	else 
-		return false;
-}
-
-sf::FloatRect Bullet::hitbox()
-{
-	sf::FloatRect fRect(
-		rect.getGlobalBounds().left,
-		rect.getGlobalBounds().top,
-		rect.getGlobalBounds().width,
-		rect.getGlobalBounds().height
-	);
-	return fRect;
+	else
+	{
+		if (sprite.getGlobalBounds().top < WINDOW_HEIGHT)
+		{
+			sprite.move(0.0f, bulletSpeed * dt.asSeconds());
+		}
+	}
 }

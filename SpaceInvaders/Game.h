@@ -24,9 +24,9 @@ public:
 
 private:
 	// Vectors
-	std::vector<Bullet> playerBulletsVec;		// all player's bullets on screen
-	std::vector<Bullet> enemyBulletsVec;		// all enemy's bullets on screen
-	std::vector<GraphicalObject*> enemiesVec;	// all enemies on screen
+	std::vector<GraphicalObject*> playerBulletsVec;		// all player's bullets on screen
+	std::vector<GraphicalObject*> enemyBulletsVec;		// all enemy's bullets on screen
+	std::vector<std::vector<GraphicalObject*>> enemiesVec;	// all enemies on screen
 
 	// Methods
 	void initGame();
@@ -39,6 +39,7 @@ private:
 
 	void clocksHandler();
 	void animateAliens();
+	void animateBullets();
 
 	// Inits
 	sf::RenderWindow& window;
@@ -56,5 +57,7 @@ private:
 	sf::Clock enemyDeathAnimationClock;
 	sf::Clock enemiesAnimationClock;
 	float enemiesAnimationTimer = 0.6;
+	sf::Clock bulletsAnimationClock;
+	float bulletsAnimationTimer = 0.05;
 };
 

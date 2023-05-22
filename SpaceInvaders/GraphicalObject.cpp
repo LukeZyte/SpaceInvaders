@@ -6,8 +6,8 @@ GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texture
 	std::cout << "Utworzono GraphicalObject obj!\n";
 
 	// Player Init
-	textures[0].loadFromFile(_texturePath);
-	textures[1].loadFromFile(_texturePath);
+	textures[0].loadFromFile(texturePath);
+	textures[1].loadFromFile(texturePath);
 	sprite.setTexture(textures[textureFrameIndex]);
 	
 	//resetPosition();
@@ -47,13 +47,35 @@ void GraphicalObject::setTextureFrameIndex(int newIndex)
 	textureFrameIndex = newIndex;
 }
 
-//void GraphicalObject::resetPosition()
-//{
-//	sprite.setPosition(initPosition.x, initPosition.y);
-//};
+bool GraphicalObject::isOutOfBounds()
+{
+	if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height < 0)
+		return true;
+	else
+		return false;
+}
+
+void GraphicalObject::resetPosition()
+{
+	sprite.setPosition(initPosition.x, initPosition.y);
+};
 
 
-//void GraphicalObject::draw()
-//{
-//	this->window->draw(sprite);
-//}
+void GraphicalObject::draw()
+{
+	this->window->draw(sprite);
+}
+
+void GraphicalObject::toggleTexture()
+{
+	if (textureFrameIndex == 0)
+	{
+		getSprite()->setTexture(textures[1]);
+		setTextureFrameIndex(1);
+	}
+	else
+	{
+		getSprite()->setTexture(textures[0]);
+		setTextureFrameIndex(0);
+	}
+}

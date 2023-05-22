@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Globals.h"
-#include "Bullet.h"
 
 #include <iostream>
 #include <array>
@@ -14,15 +13,17 @@ public:
 	GraphicalObject(sf::RenderWindow* _window, std::string _texturePath, std::string _texturePath2, sf::Vector2f _initPosition);
 	~GraphicalObject();
 
-	virtual void resetPosition() = 0;
-	virtual void draw() = 0;
+	void resetPosition();
+	void draw();
 	virtual void moveEntityLeft(sf::Time& dt) = 0;
 	virtual void moveEntityRight(sf::Time& dt) = 0;
+	virtual void moveEntity(sf::Time& dt, bool goUp) = 0;
 	virtual sf::Vector2f getRifleBound() = 0;
 
-	virtual bool collisionCheck(Bullet& bullet) = 0;
+	virtual bool collisionCheck(GraphicalObject* bullet) = 0;
 	virtual void deathAnimation() = 0;
-	virtual void toggleTexture() = 0;
+	void toggleTexture();
+	bool isOutOfBounds();
 
 	sf::FloatRect hitbox();
 

@@ -18,12 +18,12 @@ public:
 	void draw();
 	void moveEntityLeft(sf::Time& dt);
 	void moveEntityRight(sf::Time& dt);
+	void moveEntity(sf::Time& dt, bool goUp) {};
 	sf::Vector2f getRifleBound();
 
-	bool collisionCheck(Bullet& bullet);
+	bool collisionCheck(GraphicalObject* bullet);
 	void deathAnimation() {};
 	void toggleTexture() {};
-
 
 private:
 
