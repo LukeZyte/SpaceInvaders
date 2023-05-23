@@ -12,16 +12,6 @@ Player::~Player()
 	std::cout << "Zniszczono Player obj!\n";
 }
 
-void Player::draw()
-{
-	this->window->draw(sprite);
-}
-
-void Player::resetPosition()
-{
-	sprite.setPosition(initPosition.x, initPosition.y);
-}
-
 void Player::moveEntityLeft(sf::Time& dt, float gameSpeed)
 {
 	if (sprite.getGlobalBounds().left > 0)

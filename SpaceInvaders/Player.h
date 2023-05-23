@@ -14,16 +14,11 @@ public:
 	Player(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition);
 	~Player();
 
-	void resetPosition();
-	void draw();
 	void moveEntityLeft(sf::Time& dt, float gameSpeed = 1);
 	void moveEntityRight(sf::Time& dt, float gameSpeed = 1);
-	void moveEntity(sf::Time& dt, float gameSpeed = 1) {};
 	sf::Vector2f getRifleBound();
 
 	bool collisionCheck(GraphicalObject* bullet);
-	void deathAnimation() {};
-	void toggleTexture() {};
 
 private:
 

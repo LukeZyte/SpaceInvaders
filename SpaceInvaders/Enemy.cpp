@@ -19,12 +19,6 @@ Enemy::~Enemy()
 	
 }
 
-void Enemy::deathAnimation()
-{
-	sprite.setTexture(deathTexture);
-}
-
-
 bool Enemy::collisionCheck(GraphicalObject* bullet)
 {
 	if (hitbox().intersects(bullet->hitbox()))

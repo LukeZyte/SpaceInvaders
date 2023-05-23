@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "EnemyBullet.h"
 #include "Gameover.h"
+#include "Wall.h"
 
 #include <algorithm>
 #include <random>
@@ -28,9 +29,10 @@ public:
 
 private:
 	// Vectors
-	std::vector<GraphicalObject*> playerBulletsVec;		// all player's bullets on screen
-	std::vector<GraphicalObject*> enemyBulletsVec;		// all enemy's bullets on screen
-	std::vector<GraphicalObject*> enemiesVec;	// all enemies on screen
+	std::vector<Bullet*> playerBulletsVec;			// all player's bullets on screen
+	std::vector<EnemyBullet*> enemyBulletsVec;		// all enemy's bullets on screen
+	std::vector<Enemy*> enemiesVec;					// all enemies on screen
+	std::vector<Wall*> wallsVec;					// all walls on screen
 
 	// Methods
 	void initGame();
@@ -39,6 +41,7 @@ private:
 	void playerShots();
 	void eraseBullets();
 	void drawEnemies();
+	void drawWalls();
 	void checkCollisions();
 	void deleteDeadBodies();		// removes objects that have deadAnimation
 
@@ -55,12 +58,13 @@ private:
 	MainMenu mainMenu{ window };
 	Gameover gameover{ window };
 	
-	GraphicalObject* player = new Player(&window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 100.f));
-	Level level{ window };
+	Player* player = new Player(&window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 70.f));
+	Level* level = new Level(window);
 
 	// States and Vars
 	std::string gameState;
-	bool lockMovement = false;
+	bool lockMovement = true;
+	float gameSpeed = 1;
 
 	// Utils
 	sf::Clock reloadClock;

@@ -22,7 +22,7 @@ Gameover::Gameover(sf::RenderWindow& _window) : window(_window)
 		std::cout << "Could not load a font file!\n";
 
 	playText.setFont(playTextFont);
-	playText.setString("Press SPACE to restart!");
+	playText.setString("Press R to restart!");
 	playText.setFillColor(sf::Color::White);
 	playText.setCharacterSize(24);
 	playText.setStyle(sf::Text::Regular);

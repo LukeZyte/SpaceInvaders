@@ -24,15 +24,16 @@ void Game::draw(sf::Time& dt)
     {
         clocksHandler();
 
-        level.draw();
+        level->draw();
         player->draw();
+        drawWalls();
         drawEnemies();
         alienShots();
         checkCollisions();
     }
     else if (gameState == "gameover")
     {
-        level.draw();
+        level->draw();
         player->draw();
         drawEnemies();
         alienShots();
@@ -45,7 +46,7 @@ void Game::moveElements(sf::Time& dt)
 {
     if (!lockMovement)
     {
-        level.moveBackgorund(dt);
+        level->moveBackgorund(dt, gameSpeed);
         for (auto& bullet : playerBulletsVec)
         {
             bullet->draw();
@@ -54,12 +55,12 @@ void Game::moveElements(sf::Time& dt)
         for (auto& bullet : enemyBulletsVec)
         {
             bullet->draw();
-            bullet->moveEntity(dt);
+            bullet->moveEntity(dt, gameSpeed);
         }
 
         for (auto& enemy : enemiesVec)
         {
-            enemy->moveEntity(dt, 1);
+            enemy->moveEntity(dt, gameSpeed);
         }
     }
 }
@@ -95,47 +96,58 @@ void Game::gameLoop()
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "menu")
-        {
-            initGame();
-            gameState = "game";
-        }
-
-        if (!lockMovement)
-        {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && gameState == "game") {
-                player->moveEntityLeft(dt, 1);
-            }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && gameState == "game") {
-                player->moveEntityRight(dt, 1);
-            }
-
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "game") {
-                if (reloadClock.getElapsedTime().asSeconds() > reloadTime)
-                {
-                    playerShots();
-                    reloadClock.restart();
-                }
-            }
-        }
-
-        if (gameState == "gameover")
+        if (gameState == "menu")
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
-                eraseGame();
-                //initGame();
+                initGame();
                 gameState = "game";
                 lockMovement = false;
-                std::cout << "gameoverState\n";
+            }
+        }
+        else if (gameState == "game")
+        {
+            if (!lockMovement)
+            {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                    player->moveEntityLeft(dt, 1);
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                    player->moveEntityRight(dt, 1);
+                }
+
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                    if (reloadClock.getElapsedTime().asSeconds() > reloadTime)
+                    {
+                        playerShots();
+                        reloadClock.restart();
+                    }
+                }
+            }
+        }
+        else if (gameState == "gameover")
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+            {
+                eraseGame();
+                initGame();
+                gameState = "game";
+                lockMovement = false;
+                gameSpeed = 1.f;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+            {
+                eraseGame();
+                gameState = "menu";
+                lockMovement = true;
             }
         }
 
         window.clear();
 
         eraseBullets();
-        level.draw();
+        level->draw();
         draw(dt);
         moveElements(dt);
 
@@ -145,39 +157,42 @@ void Game::gameLoop()
 
 void Game::initGame()
 {
+    // Create enemies
     for (int i = 50; i <= 350; i = i + 70)
     {
         for (int j = 0; j <= WINDOW_WIDTH - 350; j = j + 100)
         {
-            GraphicalObject* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(j, i));
+            Enemy* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(j, i));
             enemiesVec.push_back(enemy);
         }
     }
+
+    // Create walls
+    Wall* wall1 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(100.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall2 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(375.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall3 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(675.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall4 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(950.f, WINDOW_HEIGHT - 150.f));
+    wallsVec.push_back(wall1);
+    wallsVec.push_back(wall2);
+    wallsVec.push_back(wall3);
+    wallsVec.push_back(wall4);
 }
 
 void Game::eraseGame()
 {
     player->resetPosition();
-    for (int i = 0; i < playerBulletsVec.size(); i++)
-    {
-        playerBulletsVec.pop_back();
-    }
-    for (int i = 0; i < enemyBulletsVec.size(); i++)
-    {
-        enemyBulletsVec.pop_back();
-    }
-    for (int i = 0; i < enemiesVec.size(); i++)
-    {
-        enemiesVec.pop_back();
-    }
+    level->stopBackground();
+    playerBulletsVec.clear();
+    enemyBulletsVec.clear();
+    enemiesVec.clear();
 }
 
 void Game::playerShots()
 {
-    GraphicalObject* bullet = new Bullet(&window, BULLET_FILEPATH, BULLET_LIGHT_FILEPATH, player->getRifleBound());
+    Bullet* bullet = new Bullet(&window, BULLET_FILEPATH, BULLET_LIGHT_FILEPATH, player->getRifleBound());
     playerBulletsVec.push_back(bullet);
 
-    std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
+    //std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
 }
 
 void Game::eraseBullets()
@@ -187,7 +202,7 @@ void Game::eraseBullets()
         if (playerBulletsVec[i]->isOutOfBounds())
         {
             playerBulletsVec.erase(playerBulletsVec.begin() + i);
-            std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
+            //std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
             break;
         }
     }
@@ -197,7 +212,7 @@ void Game::eraseBullets()
         if (enemyBulletsVec[i]->isOutOfBounds())
         {
             enemyBulletsVec.erase(enemyBulletsVec.begin() + i);
-            std::cout << "enemyBulletsVec size: " << enemyBulletsVec.size() << "\n";
+            //std::cout << "enemyBulletsVec size: " << enemyBulletsVec.size() << "\n";
             break;
         }
     }
@@ -211,6 +226,14 @@ void Game::drawEnemies()
     }
 }
 
+void Game::drawWalls()
+{
+    for (auto& wall : wallsVec)
+    {
+        wall->draw();
+    }
+}
+
 void Game::checkCollisions()
 {
     // Bullet <=> Enemy
@@ -220,9 +243,12 @@ void Game::checkCollisions()
         {
             if (enemiesVec[ie]->collisionCheck(playerBulletsVec[ib]))
             {
-                std::cout << "enemiesVecSize: " << enemiesVec.size() << std::endl;
+                //std::cout << "enemiesVecSize: " << enemiesVec.size() << std::endl;
                 playerBulletsVec.erase(playerBulletsVec.begin() + ib);
                 enemiesVec.erase(enemiesVec.begin() + ie);
+
+                // Speed up the game
+                gameSpeed = gameSpeed * 1.05;
             }
         }
     }
@@ -238,6 +264,36 @@ void Game::checkCollisions()
         }
     }
 
+    //Bullet <=> Wall
+    for (int iw = 0; iw < wallsVec.size(); iw++)
+    {
+        for (int ib = 0; ib < playerBulletsVec.size(); ib++)
+        {
+            if (wallsVec[iw]->collisionCheck(playerBulletsVec[ib]))
+            {
+                playerBulletsVec.erase(playerBulletsVec.begin() + ib);
+                wallsVec[iw]->hit();
+                wallsVec[iw]->changeTexture();
+                if (wallsVec[iw]->getHP() == 0)
+                {
+                    wallsVec.erase(wallsVec.begin() + iw);
+                }
+            }
+        }
+        for (int ib = 0; ib < enemyBulletsVec.size(); ib++)
+        {
+            if (wallsVec[iw]->collisionCheck(enemyBulletsVec[ib]))
+            {
+                enemyBulletsVec.erase(enemyBulletsVec.begin() + ib);
+                wallsVec[iw]->hit();
+                wallsVec[iw]->changeTexture();
+                if (wallsVec[iw]->getHP() == 0)
+                {
+                    wallsVec.erase(wallsVec.begin() + iw);
+                }
+            }
+        }
+    }
 }
 
 void Game::deleteDeadBodies()
@@ -255,7 +311,6 @@ void Game::animateAliens()
 
 void Game::animateBullets()
 {
-    //std::cout << "Change!\n";
     for (int i = 0; i < playerBulletsVec.size(); i++)
     {
         playerBulletsVec[i]->toggleTexture();
@@ -264,15 +319,20 @@ void Game::animateBullets()
 
 void Game::alienShots()
 {
+    if (enemiesVec.size() < 1)
+    {
+        return;
+    }
+
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<std::mt19937::result_type> distance(0, enemiesVec.size());
-    GraphicalObject* randomAlien = enemiesVec[distance(gen)];
+   Enemy* randomAlien = enemiesVec[distance(gen)];
 
     // Alien shots
     if (enemyReloadClock.getElapsedTime().asSeconds() > enemyReloadTime)
     {
-        GraphicalObject* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, randomAlien->getRifleBound());
+        EnemyBullet* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, randomAlien->getRifleBound());
         enemyBulletsVec.push_back(bullet);
         enemyReloadClock.restart();
     }

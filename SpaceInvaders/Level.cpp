@@ -24,15 +24,16 @@ void Level::draw()
 	window.draw(background2);
 }
 
-void Level::moveBackgorund(sf::Time& dt)
+void Level::moveBackgorund(sf::Time& dt, float gameSpeed)
 {
 	if (bgMoveSpeed <= bgMaxSpeed)
 	{
 		bgMoveSpeed = bgMoveSpeed + acceleration;
+		std::cout << bgMoveSpeed << "\n";
 	}
 
-	background.move(0.f, bgMoveSpeed * dt.asSeconds());
-	background2.move(0.f, bgMoveSpeed * dt.asSeconds());
+	background.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5);
+	background2.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5);
 
 	// repeating the bg as it moves
 	if (background.getGlobalBounds().top > WINDOW_HEIGHT)
@@ -44,4 +45,9 @@ void Level::moveBackgorund(sf::Time& dt)
 	{
 		background2.setPosition(0.f, -background2.getGlobalBounds().height);
 	}
+}
+
+void Level::stopBackground()
+{
+	bgMoveSpeed = 0;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 900
+#define WINDOW_HEIGHT 1000
 #define FPS_LIMIT 120
 
 // Fonts
@@ -18,3 +18,8 @@
 #define ENEMY_DEAD_MODEL_FILEPATH "resources/img/AlienDestroyedTexture.png"
 #define ENEMYBULLET_FILEPATH "resources/img/enemyBullet.png"
 #define ENEMYBULLET_LIGHT_FILEPATH "resources/img/enemyBullet2.png"
+#define WALL_FULL_FILEPATH "resources/img/wall_full.png"
+#define WALL_4_FILEPATH "resources/img/wall_4.png"
+#define WALL_3_FILEPATH "resources/img/wall_3.png"
+#define WALL_2_FILEPATH "resources/img/wall_2.png"
+#define WALL_1_FILEPATH "resources/img/wall_1.png"

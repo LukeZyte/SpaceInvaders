@@ -15,20 +15,12 @@ public:
 
 	void resetPosition();
 	void draw();
-	virtual void moveEntityLeft(sf::Time& dt, float gameSpeed) = 0;
-	virtual void moveEntityRight(sf::Time& dt, float gameSpeed) = 0;
-	virtual void moveEntity(sf::Time& dt, float gameSpeed = 1) = 0;
-	virtual sf::Vector2f getRifleBound() = 0;
-
-	virtual bool collisionCheck(GraphicalObject* bullet) = 0;
-	virtual void deathAnimation() = 0;
 	void toggleTexture();
 	bool isOutOfBounds();
 
 	sf::FloatRect hitbox();
 
 	sf::Sprite* getSprite() { return &sprite; }
-	//sf::Texture getTexture() { return texture; }
 	void setTextureFrameIndex(int newIndex);
 	int getTextureFrameIndex() { return textureFrameIndex; }
 

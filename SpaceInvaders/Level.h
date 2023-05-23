@@ -12,7 +12,8 @@ public:
 	~Level();
 
 	void draw();
-	void moveBackgorund(sf::Time& dt);
+	void moveBackgorund(sf::Time& dt, float gameSpeed = 1);
+	void stopBackground();
 
 private:
 	sf::RenderWindow& window;
@@ -21,9 +22,9 @@ private:
 	sf::Texture texture;
 	sf::Sprite background;
 	sf::Sprite background2;
-	const int bgMaxSpeed = 400;
-	int bgMoveSpeed = 0;
-	const int acceleration = 1;
+	const float bgMaxSpeed = 150;
+	float bgMoveSpeed = 0;
+	const float acceleration = 0.5;
 
 	const int transparency = 100;
 };
