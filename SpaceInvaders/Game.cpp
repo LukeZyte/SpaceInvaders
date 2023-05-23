@@ -56,6 +56,11 @@ void Game::moveElements(sf::Time& dt)
             bullet->draw();
             bullet->moveEntity(dt);
         }
+
+        for (auto& enemy : enemiesVec)
+        {
+            enemy->moveEntity(dt, 1);
+        }
     }
 }
 
@@ -76,15 +81,11 @@ void Game::clocksHandler()
 void Game::gameLoop()
 {
     sf::Clock clock;
-    //sf::Clock appClock;
 
     while (window.isOpen())
     {
         sf::Time dt = clock.restart();
         sf::Event event;
-
-        //std::cout << "Time step: " << dt.asSeconds() << '\n';
-        //std::cout << appClock.getElapsedTime().asSeconds() << "\n";
 
         while (window.pollEvent(event))
         {
@@ -103,11 +104,11 @@ void Game::gameLoop()
         if (!lockMovement)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && gameState == "game") {
-                player->moveEntityLeft(dt);
+                player->moveEntityLeft(dt, 1);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && gameState == "game") {
-                player->moveEntityRight(dt);
+                player->moveEntityRight(dt, 1);
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && gameState == "game") {
@@ -117,16 +118,23 @@ void Game::gameLoop()
                     reloadClock.restart();
                 }
             }
+        }
 
-            if (gameState == "gameover")
+        if (gameState == "gameover")
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
-
+                eraseGame();
+                //initGame();
+                gameState = "game";
+                lockMovement = false;
+                std::cout << "gameoverState\n";
             }
         }
 
         window.clear();
 
-        erasePlayerShots();
+        eraseBullets();
         level.draw();
         draw(dt);
         moveElements(dt);
@@ -139,11 +147,28 @@ void Game::initGame()
 {
     for (int i = 50; i <= 350; i = i + 70)
     {
-        for (int j = 150; j < WINDOW_WIDTH - 150; j = j + 100)
+        for (int j = 0; j <= WINDOW_WIDTH - 350; j = j + 100)
         {
             GraphicalObject* enemy = new Enemy(&window, ALIENTEXTURE_MODEL_FILEPATH, ALIENTEXUTRE_2_MODEL_FILEPATH, sf::Vector2f(j, i));
             enemiesVec.push_back(enemy);
         }
+    }
+}
+
+void Game::eraseGame()
+{
+    player->resetPosition();
+    for (int i = 0; i < playerBulletsVec.size(); i++)
+    {
+        playerBulletsVec.pop_back();
+    }
+    for (int i = 0; i < enemyBulletsVec.size(); i++)
+    {
+        enemyBulletsVec.pop_back();
+    }
+    for (int i = 0; i < enemiesVec.size(); i++)
+    {
+        enemiesVec.pop_back();
     }
 }
 
@@ -155,7 +180,7 @@ void Game::playerShots()
     std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
 }
 
-void Game::erasePlayerShots()
+void Game::eraseBullets()
 {
     for (int i = 0; i < playerBulletsVec.size(); i++)
     {
@@ -163,6 +188,16 @@ void Game::erasePlayerShots()
         {
             playerBulletsVec.erase(playerBulletsVec.begin() + i);
             std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
+            break;
+        }
+    }
+
+    for (int i = 0; i < enemyBulletsVec.size(); i++)
+    {
+        if (enemyBulletsVec[i]->isOutOfBounds())
+        {
+            enemyBulletsVec.erase(enemyBulletsVec.begin() + i);
+            std::cout << "enemyBulletsVec size: " << enemyBulletsVec.size() << "\n";
             break;
         }
     }

@@ -3,8 +3,6 @@
 GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition) 
 	: window(_window), texturePath(_texturePath), initPosition(_initPosition)
 {
-	std::cout << "Utworzono GraphicalObject obj!\n";
-
 	// Player Init
 	textures[0].loadFromFile(texturePath);
 	textures[1].loadFromFile(texturePath);
@@ -16,8 +14,6 @@ GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texture
 GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texturePath, std::string _texturePath2, sf::Vector2f _initPosition)
 	: window(_window), texturePath(_texturePath), texturePath2(_texturePath2), initPosition(_initPosition)
 {
-	std::cout << "Utworzono GraphicalObject obj!\n";
-
 	// Player Init
 	textures[0].loadFromFile(_texturePath);
 	textures[1].loadFromFile(_texturePath2);
@@ -28,7 +24,6 @@ GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texture
 
 GraphicalObject::~GraphicalObject()
 {
-	std::cout << "Zniszczono GraphicalOject obj!\n";
 }
 
 sf::FloatRect GraphicalObject::hitbox()
@@ -49,7 +44,7 @@ void GraphicalObject::setTextureFrameIndex(int newIndex)
 
 bool GraphicalObject::isOutOfBounds()
 {
-	if (sprite.getGlobalBounds().top + sprite.getGlobalBounds().height < 0)
+	if ((sprite.getGlobalBounds().top + sprite.getGlobalBounds().height < 0) || (sprite.getGlobalBounds().top > WINDOW_HEIGHT))
 		return true;
 	else
 		return false;

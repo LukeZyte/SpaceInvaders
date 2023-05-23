@@ -15,9 +15,9 @@ public:
 
 	void resetPosition();
 	void draw();
-	virtual void moveEntityLeft(sf::Time& dt) = 0;
-	virtual void moveEntityRight(sf::Time& dt) = 0;
-	virtual void moveEntity(sf::Time& dt) = 0;
+	virtual void moveEntityLeft(sf::Time& dt, float gameSpeed) = 0;
+	virtual void moveEntityRight(sf::Time& dt, float gameSpeed) = 0;
+	virtual void moveEntity(sf::Time& dt, float gameSpeed = 1) = 0;
 	virtual sf::Vector2f getRifleBound() = 0;
 
 	virtual bool collisionCheck(GraphicalObject* bullet) = 0;

@@ -34,9 +34,10 @@ private:
 
 	// Methods
 	void initGame();
+	void eraseGame();
 
 	void playerShots();
-	void erasePlayerShots();
+	void eraseBullets();
 	void drawEnemies();
 	void checkCollisions();
 	void deleteDeadBodies();		// removes objects that have deadAnimation

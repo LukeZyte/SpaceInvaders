@@ -11,7 +11,7 @@ EnemyBullet::~EnemyBullet()
 
 }
 
-void EnemyBullet::moveEntity(sf::Time& dt)
+void EnemyBullet::moveEntity(sf::Time& dt, float gameSpeed)
 {
 	if (sprite.getGlobalBounds().top < WINDOW_HEIGHT)
 	{

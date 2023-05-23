@@ -14,14 +14,14 @@ public:
 
 	//void draw();
 
-	void moveEntity(sf::Time& dt);
+	void moveEntity(sf::Time& dt, float gameSpeed = 1);
 	//bool isOutOfBounds();
 	//sf::RectangleShape getRectShape() { return rect; }
 
 	//sf::FloatRect hitbox();
 
-	void moveEntityLeft(sf::Time& dt) {};
-	void moveEntityRight(sf::Time& dt) {};
+	void moveEntityLeft(sf::Time& dt, float gameSpeed = 1) {};
+	void moveEntityRight(sf::Time& dt, float gameSpeed = 1) {};
 	sf::Vector2f getRifleBound() { return sf::Vector2f{ 0.0, 0.0 }; }
 
 	bool collisionCheck(GraphicalObject* bullet) { return false; };

@@ -22,7 +22,7 @@ void Player::resetPosition()
 	sprite.setPosition(initPosition.x, initPosition.y);
 }
 
-void Player::moveEntityLeft(sf::Time& dt)
+void Player::moveEntityLeft(sf::Time& dt, float gameSpeed)
 {
 	if (sprite.getGlobalBounds().left > 0)
 	{
@@ -30,7 +30,7 @@ void Player::moveEntityLeft(sf::Time& dt)
 	}
 };
 
-void Player::moveEntityRight(sf::Time& dt)
+void Player::moveEntityRight(sf::Time& dt, float gameSpeed)
 {
 	if (sprite.getGlobalBounds().left + sprite.getGlobalBounds().width < WINDOW_WIDTH)
 	{

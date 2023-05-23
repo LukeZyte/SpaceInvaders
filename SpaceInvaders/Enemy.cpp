@@ -40,3 +40,24 @@ sf::Vector2f Enemy::getRifleBound()
 	return vec;
 };
 
+void Enemy::moveEntity(sf::Time& dt, float gameSpeed)
+{
+	stepsPassed += moveSpeed * dt.asSeconds() * gameSpeed;
+
+	if (moveRight && maxStepsToPass > stepsPassed)
+	{
+		sprite.move(moveSpeed * dt.asSeconds() * gameSpeed, 0.f);
+	}
+
+	if (maxStepsToPass < stepsPassed)
+	{
+		sprite.move(0.f, 30.f);
+		stepsPassed = 0;
+		moveRight = !moveRight;
+	}
+
+	if (!moveRight && maxStepsToPass > stepsPassed)
+	{
+		sprite.move(-moveSpeed * dt.asSeconds() * gameSpeed, 0.f);
+	}
+}
