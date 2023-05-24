@@ -23,3 +23,4 @@
 #define WALL_3_FILEPATH "resources/img/wall_3.png"
 #define WALL_2_FILEPATH "resources/img/wall_2.png"
 #define WALL_1_FILEPATH "resources/img/wall_1.png"
+#define SAFEAREA_FILEPATH "resources/img/safearea.png"

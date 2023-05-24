@@ -45,3 +45,8 @@ void Wall::changeTexture()
 	}
 	sprite.setTexture(tex);
 }
+
+void Wall::hit()
+{
+	HP--;
+}

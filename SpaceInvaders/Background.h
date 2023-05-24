@@ -5,11 +5,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Level
+class Background
 {
 public:
-	Level(sf::RenderWindow& _window);
-	~Level();
+	Background(sf::RenderWindow& _window);
+	~Background();
 
 	void draw();
 	void moveBackgorund(sf::Time& dt, float gameSpeed = 1);
@@ -22,6 +22,7 @@ private:
 	sf::Texture texture;
 	sf::Sprite background;
 	sf::Sprite background2;
+	
 	const float bgMaxSpeed = 150;
 	float bgMoveSpeed = 0;
 	const float acceleration = 0.5;

@@ -154,10 +154,12 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gameover.cpp" />
     <ClCompile Include="GraphicalObject.cpp" />
-    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SafeArea.cpp" />
     <ClCompile Include="SpaceInvaders.cpp" />
+    <ClCompile Include="TopBoard.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,9 +171,11 @@
     <ClInclude Include="Gameover.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GraphicalObject.h" />
-    <ClInclude Include="Level.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SafeArea.h" />
+    <ClInclude Include="TopBoard.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

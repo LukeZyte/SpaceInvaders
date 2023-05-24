@@ -13,7 +13,7 @@ Game::~Game()
     std::cout << "Usunieto instancje Game z Game.h\n";
 }
 
-void Game::draw(sf::Time& dt)
+void Game::draw(sf::Time& dt, sf::Clock gameTime)
 {
     if (gameState == "menu")
     {
@@ -24,20 +24,23 @@ void Game::draw(sf::Time& dt)
     {
         clocksHandler();
 
-        level->draw();
+        background->draw();
+        safeAreaLine->draw();
         player->draw();
         drawWalls();
         drawEnemies();
         alienShots();
-        checkCollisions();
+        checkCollisions(gameTime);
+        checkAreaLine();
+        topBoard.draw();
     }
     else if (gameState == "gameover")
     {
-        level->draw();
+        background->draw();
         player->draw();
         drawEnemies();
         alienShots();
-        checkCollisions();
+        checkCollisions(gameTime);
         gameover.draw();
     }
 }
@@ -46,7 +49,7 @@ void Game::moveElements(sf::Time& dt)
 {
     if (!lockMovement)
     {
-        level->moveBackgorund(dt, gameSpeed);
+        background->moveBackgorund(dt, gameSpeed);
         for (auto& bullet : playerBulletsVec)
         {
             bullet->draw();
@@ -82,6 +85,7 @@ void Game::clocksHandler()
 void Game::gameLoop()
 {
     sf::Clock clock;
+    gameTime.restart();
 
     while (window.isOpen())
     {
@@ -107,6 +111,10 @@ void Game::gameLoop()
         }
         else if (gameState == "game")
         {
+            // Init game topboard values
+            topBoard.setName(playerName);
+            topBoard.setTimer(getGameTimeAsSec());
+
             if (!lockMovement)
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
@@ -141,14 +149,15 @@ void Game::gameLoop()
                 eraseGame();
                 gameState = "menu";
                 lockMovement = true;
+                gameSpeed = 1.f;
             }
         }
 
         window.clear();
 
         eraseBullets();
-        level->draw();
-        draw(dt);
+        background->draw();
+        draw(dt, gameTime);
         moveElements(dt);
 
         window.display();
@@ -157,8 +166,15 @@ void Game::gameLoop()
 
 void Game::initGame()
 {
+    resetScore();
+    resetMaxCombo();
+    resetCombo();
+    topBoard.setScore(SCORE);
+    gameTime.restart();
+    enemyReloadClock.restart();
+
     // Create enemies
-    for (int i = 50; i <= 350; i = i + 70)
+    for (int i = 100; i <= 400; i = i + 70)
     {
         for (int j = 0; j <= WINDOW_WIDTH - 350; j = j + 100)
         {
@@ -181,10 +197,11 @@ void Game::initGame()
 void Game::eraseGame()
 {
     player->resetPosition();
-    level->stopBackground();
+    background->stopBackground();
     playerBulletsVec.clear();
     enemyBulletsVec.clear();
     enemiesVec.clear();
+    wallsVec.clear();
 }
 
 void Game::playerShots()
@@ -197,16 +214,20 @@ void Game::playerShots()
 
 void Game::eraseBullets()
 {
+    // Player bullets
     for (int i = 0; i < playerBulletsVec.size(); i++)
     {
         if (playerBulletsVec[i]->isOutOfBounds())
         {
             playerBulletsVec.erase(playerBulletsVec.begin() + i);
+            resetCombo();
+            topBoard.setCombo(combo);
             //std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
             break;
         }
     }
 
+    // Enemy bullets
     for (int i = 0; i < enemyBulletsVec.size(); i++)
     {
         if (enemyBulletsVec[i]->isOutOfBounds())
@@ -234,7 +255,7 @@ void Game::drawWalls()
     }
 }
 
-void Game::checkCollisions()
+void Game::checkCollisions(sf::Clock gameTime)
 {
     // Bullet <=> Enemy
     for (int ie = 0; ie < enemiesVec.size(); ie++)
@@ -248,7 +269,11 @@ void Game::checkCollisions()
                 enemiesVec.erase(enemiesVec.begin() + ie);
 
                 // Speed up the game
-                gameSpeed = gameSpeed * 1.05;
+                gameSpeed = gameSpeed * 1.04;
+                addToScore(pointsForKill, gameTime);
+                topBoard.setScore(SCORE);
+                addCombo();
+                topBoard.setCombo(combo);
             }
         }
     }
@@ -259,8 +284,7 @@ void Game::checkCollisions()
         if (player->collisionCheck(enemyBulletsVec[ie]))
         {
             enemyBulletsVec[ie]->draw();
-            lockMovement = true;
-            gameState = "gameover";
+            death();
         }
     }
 
@@ -271,22 +295,26 @@ void Game::checkCollisions()
         {
             if (wallsVec[iw]->collisionCheck(playerBulletsVec[ib]))
             {
-                playerBulletsVec.erase(playerBulletsVec.begin() + ib);
                 wallsVec[iw]->hit();
                 wallsVec[iw]->changeTexture();
+                playerBulletsVec.erase(playerBulletsVec.begin() + ib);
                 if (wallsVec[iw]->getHP() == 0)
                 {
                     wallsVec.erase(wallsVec.begin() + iw);
                 }
+                resetCombo();
+                topBoard.setCombo(combo);
+                removePoints(pointsForHittingWall);
+                topBoard.setScore(SCORE);
             }
         }
         for (int ib = 0; ib < enemyBulletsVec.size(); ib++)
         {
             if (wallsVec[iw]->collisionCheck(enemyBulletsVec[ib]))
             {
-                enemyBulletsVec.erase(enemyBulletsVec.begin() + ib);
                 wallsVec[iw]->hit();
                 wallsVec[iw]->changeTexture();
+                enemyBulletsVec.erase(enemyBulletsVec.begin() + ib);
                 if (wallsVec[iw]->getHP() == 0)
                 {
                     wallsVec.erase(wallsVec.begin() + iw);
@@ -296,9 +324,14 @@ void Game::checkCollisions()
     }
 }
 
-void Game::deleteDeadBodies()
+void Game::death()
 {
-
+    if (!lockMovement)
+    {
+        gameover.setValues(playerName, SCORE, maxCombo, getGameTimeAsSec());
+    }
+    lockMovement = true;
+    gameState = "gameover";
 }
 
 void Game::animateAliens()
@@ -327,7 +360,7 @@ void Game::alienShots()
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<std::mt19937::result_type> distance(0, enemiesVec.size());
-   Enemy* randomAlien = enemiesVec[distance(gen)];
+    Enemy* randomAlien = enemiesVec[distance(gen)];
 
     // Alien shots
     if (enemyReloadClock.getElapsedTime().asSeconds() > enemyReloadTime)
@@ -336,4 +369,63 @@ void Game::alienShots()
         enemyBulletsVec.push_back(bullet);
         enemyReloadClock.restart();
     }
+}
+
+void Game::checkAreaLine()
+{
+    for (auto& enemy : enemiesVec)
+    {
+        if (enemy->getYPos() > 850.f)
+        {
+            death();
+            std::cout << "Passed the safe area line!\n";
+        }
+    }
+}
+
+void Game::addToScore(int value, sf::Clock gameTime)
+{
+    if (value > 0)
+    {
+        for (int i = 0; i < getGameTimeAsSec(); i = i + 3)  // -1 point every new 3s of the gameTime
+        {
+            value--;
+        }
+    }
+    SCORE = SCORE + value + combo;
+}
+
+void Game::resetScore()
+{
+    SCORE = 0;
+}
+
+int Game::getGameTimeAsSec()
+{
+    return gameTime.getElapsedTime().asSeconds();
+}
+
+void Game::addCombo()
+{
+    combo = combo + 5;
+    if (maxCombo < combo)
+    {
+        maxCombo = combo;
+    }
+}
+
+void Game::resetCombo()
+{
+    combo = 0;
+}
+
+void Game::resetMaxCombo()
+{
+    maxCombo = 0;
+}
+
+
+void Game::removePoints(int value)
+{
+    SCORE = SCORE - value;
 }

@@ -1,9 +1,9 @@
-#include "Level.h"
+#include "Background.h"
 
 
-Level::Level(sf::RenderWindow& _window) : window(_window)
+Background::Background(sf::RenderWindow& _window) : window(_window)
 {
-	std::cout << "Utworzono Level obj!\n";
+	std::cout << "Utworzono Background obj!\n";
 
 	// Background Init
 	texture.loadFromFile(SPACE_BACKGROUND_FILEPATH);
@@ -13,23 +13,22 @@ Level::Level(sf::RenderWindow& _window) : window(_window)
 	background2.setPosition(0.f, -background.getGlobalBounds().height);
 }
 
-Level::~Level()
+Background::~Background()
 {
-	std::cout << "Zniszczono Level obj!\n";
+	std::cout << "Zniszczono Background obj!\n";
 }
 
-void Level::draw()
+void Background::draw()
 {
 	window.draw(background);
 	window.draw(background2);
 }
 
-void Level::moveBackgorund(sf::Time& dt, float gameSpeed)
+void Background::moveBackgorund(sf::Time& dt, float gameSpeed)
 {
 	if (bgMoveSpeed <= bgMaxSpeed)
 	{
 		bgMoveSpeed = bgMoveSpeed + acceleration;
-		std::cout << bgMoveSpeed << "\n";
 	}
 
 	background.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5);
@@ -47,7 +46,7 @@ void Level::moveBackgorund(sf::Time& dt, float gameSpeed)
 	}
 }
 
-void Level::stopBackground()
+void Background::stopBackground()
 {
 	bgMoveSpeed = 0;
 }

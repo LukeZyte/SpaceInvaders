@@ -55,3 +55,8 @@ void Enemy::moveEntity(sf::Time& dt, float gameSpeed)
 		sprite.move(-moveSpeed * dt.asSeconds() * gameSpeed, 0.f);
 	}
 }
+
+float Enemy::getYPos()
+{
+	return sprite.getGlobalBounds().top + sprite.getGlobalBounds().height;
+}

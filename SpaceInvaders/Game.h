@@ -4,12 +4,14 @@
 #include "MainMenu.h"
 #include "Player.h"
 #include "GraphicalObject.h"
-#include "Level.h"
+#include "Background.h"
 #include "Bullet.h"
 #include "Enemy.h"
 #include "EnemyBullet.h"
 #include "Gameover.h"
 #include "Wall.h"
+#include "SafeArea.h"
+#include "TopBoard.h"
 
 #include <algorithm>
 #include <random>
@@ -25,7 +27,7 @@ public:
 	~Game();
 
 	void gameLoop();
-	void draw(sf::Time& dt);
+	void draw(sf::Time& dt, sf::Clock gameTime);
 
 private:
 	// Vectors
@@ -37,34 +39,52 @@ private:
 	// Methods
 	void initGame();
 	void eraseGame();
+	void clocksHandler();
 
 	void playerShots();
+	void alienShots();
 	void eraseBullets();
 	void drawEnemies();
 	void drawWalls();
-	void checkCollisions();
-	void deleteDeadBodies();		// removes objects that have deadAnimation
-
+	void checkCollisions(sf::Clock gameTime);
+	void death();
 	void moveElements(sf::Time& dt);
+	void checkAreaLine();					// have any enemy passed the safe area line
 
-	void clocksHandler();
 	void animateAliens();
 	void animateBullets();
 
-	void alienShots();
+	void addToScore(int vlaue, sf::Clock gameTime);
+	void resetScore();
+	void addCombo();
+	void resetCombo();
+	void resetMaxCombo();
+	void removePoints(int value);
+
+	int getGameTimeAsSec();
 
 	// Inits
 	sf::RenderWindow& window;
 	MainMenu mainMenu{ window };
 	Gameover gameover{ window };
-	
+	TopBoard topBoard{ window };
 	Player* player = new Player(&window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 70.f));
-	Level* level = new Level(window);
+	Background* background = new Background(window);
+	SafeArea* safeAreaLine = new SafeArea(&window, SAFEAREA_FILEPATH, sf::Vector2f(0.f, 840.f));
 
 	// States and Vars
 	std::string gameState;
 	bool lockMovement = true;
 	float gameSpeed = 1;
+	std::string playerName = "LUKE";
+
+	// Points system
+	int SCORE = 0;
+	int combo = 0;
+	int maxCombo = 0;
+	int pointsForKill = 50;
+	int pointsForHittingWall = 100;
+	
 
 	// Utils
 	sf::Clock reloadClock;
@@ -76,5 +96,6 @@ private:
 	float enemiesAnimationTimer = 0.6;
 	sf::Clock bulletsAnimationClock;
 	float bulletsAnimationTimer = 0.05;
+	sf::Clock gameTime;
 };
 

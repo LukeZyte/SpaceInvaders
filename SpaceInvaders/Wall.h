@@ -14,7 +14,7 @@ public:
 
 	bool collisionCheck(GraphicalObject* bullet);
 
-	void hit() { HP--; }
+	void hit();
 	void changeTexture();
 	int getHP() { return HP; }
 

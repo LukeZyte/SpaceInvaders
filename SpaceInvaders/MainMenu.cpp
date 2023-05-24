@@ -17,14 +17,14 @@ MainMenu::MainMenu(sf::RenderWindow& _window) : window(_window)
 	title.setPosition((WINDOW_WIDTH / 2) - (title.getGlobalBounds().width / 2), 100.f);
 
 	// playText Init
-	if (!playTextFont.loadFromFile(PRESSSTART2P_FILEPATH))
+	if (!playTextFont.loadFromFile(PIXELOIDSANS_FILEPATH))
 		std::cout << "Could not load a font file!\n";
 
 	playText.setFont(playTextFont);
 	playText.setString("Press SPACE to start!");
 	playText.setFillColor(sf::Color::White);
-	playText.setCharacterSize(24);
-	playText.setStyle(sf::Text::Regular);
+	playText.setCharacterSize(32);
+	playText.setStyle(sf::Text::Bold);
 
 	playText.setPosition((WINDOW_WIDTH / 2) - (playText.getGlobalBounds().width / 2), WINDOW_HEIGHT - 300.f);
 }

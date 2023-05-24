@@ -20,6 +20,8 @@ public:
 
 	bool collisionCheck(GraphicalObject* bullet);
 
+	float getYPos();
+
 private:
 
 	sf::Texture deathTexture;
