@@ -29,10 +29,10 @@ Sounds::Sounds()
 	}
 
 	// Musics Init
-	if (!mainMusic.openFromFile(MAIN_MUSIC_FILEPATH))
+	/*if (!mainMusic.openFromFile(MAIN_MUSIC_FILEPATH))
 	{
 		std::cout << "Could not load a music file!\n";
-	}
+	}*/
 
 	click.setBuffer(clickBuff);
 	explosion.setBuffer(explosionBuff);

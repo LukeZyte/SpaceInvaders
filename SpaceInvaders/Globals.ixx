@@ -41,5 +41,5 @@ export
 	std::string WRONG_SOUND_FILEPATH = "resources/sounds/wrong.wav";
 
 	// Music
-	std::string MAIN_MUSIC_FILEPATH = "resources/sounds/Her-Heart.ogg";
+	//std::string MAIN_MUSIC_FILEPATH = "resources/sounds/Her-Heart.ogg";
 }
