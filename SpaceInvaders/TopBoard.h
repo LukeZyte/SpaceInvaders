@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Globals.h"
+//#include "Globals.h"
+import Globals;
 
 #include <SFML/Graphics.hpp>
 #include <iostream>

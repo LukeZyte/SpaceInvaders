@@ -153,14 +153,19 @@
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gameover.cpp" />
+    <ClCompile Include="Globals.ixx" />
     <ClCompile Include="GraphicalObject.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="NicknameScreen.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RecordsScreen.cpp" />
     <ClCompile Include="SafeArea.cpp" />
+    <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="SpaceInvaders.cpp" />
     <ClCompile Include="TopBoard.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienSoldier.h" />
@@ -173,10 +178,14 @@
     <ClInclude Include="GraphicalObject.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="NicknameScreen.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RecordsScreen.h" />
     <ClInclude Include="SafeArea.h" />
+    <ClInclude Include="Sounds.h" />
     <ClInclude Include="TopBoard.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="WinScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

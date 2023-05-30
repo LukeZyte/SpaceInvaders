@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Globals.h"
+//#include "Globals.h"
+import Globals;
 #include "MainMenu.h"
 #include "Player.h"
 #include "GraphicalObject.h"
@@ -12,6 +13,10 @@
 #include "Wall.h"
 #include "SafeArea.h"
 #include "TopBoard.h"
+#include "WinScreen.h"
+#include "NicknameScreen.h"
+#include "RecordsScreen.h"
+#include "Sounds.h"
 
 #include <algorithm>
 #include <random>
@@ -19,6 +24,9 @@
 #include <vector>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <ranges>
+#include <fstream>
+#include <filesystem>
 
 class Game
 {
@@ -62,12 +70,22 @@ private:
 	void removePoints(int value);
 
 	int getGameTimeAsSec();
+	void setPlayerName(std::string nickname);
+
+	// Saving data
+	void saveRecord(std::string recordFilepath);
+	void getRecord(std::string recordFilepath);
+	void getLastRecord(std::string recordFilepath);
 
 	// Inits
 	sf::RenderWindow& window;
+	Sounds sounds;
 	MainMenu mainMenu{ window };
 	Gameover gameover{ window };
 	TopBoard topBoard{ window };
+	WinScreen winScreen{ window };
+	RecordsScreen recordsScreen{ window };
+	NicknameScreen nicknameScreen{ window };
 	Player* player = new Player(&window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 70.f));
 	Background* background = new Background(window);
 	SafeArea* safeAreaLine = new SafeArea(&window, SAFEAREA_FILEPATH, sf::Vector2f(0.f, 840.f));
@@ -76,7 +94,7 @@ private:
 	std::string gameState;
 	bool lockMovement = true;
 	float gameSpeed = 1;
-	std::string playerName = "LUKE";
+	std::string playerName = "PLAYER";
 
 	// Points system
 	int SCORE = 0;
@@ -84,7 +102,16 @@ private:
 	int maxCombo = 0;
 	int pointsForKill = 50;
 	int pointsForHittingWall = 100;
-	
+
+	std::string lastNickname = "";
+	std::string lastScore = "0";
+	std::string lastMaxCombo = "0";
+	std::string lastTime = "0";
+
+	std::string recordNickname = "";
+	std::string recordScore = "0";
+	std::string recordMaxCombo = "0";
+	std::string recordTime = "0";
 
 	// Utils
 	sf::Clock reloadClock;

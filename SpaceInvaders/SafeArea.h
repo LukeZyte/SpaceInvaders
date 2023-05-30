@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GraphicalObject.h"
-#include "Globals.h"
+//#include "Globals.h"
+import Globals;
 #include "Enemy.h"
 
 #include <SFML/Graphics.hpp>

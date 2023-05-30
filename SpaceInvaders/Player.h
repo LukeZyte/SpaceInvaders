@@ -2,7 +2,8 @@
 
 #include "GraphicalObject.h"
 #include "Bullet.h"
-#include "Globals.h"
+//#include "Globals.h"
+import Globals;
 
 #include <SFML/Graphics.hpp>
 #include <iostream>

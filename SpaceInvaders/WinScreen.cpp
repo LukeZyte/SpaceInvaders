@@ -1,6 +1,7 @@
-#include "Gameover.h"
+#include "WinScreen.h"
 
-Gameover::Gameover(sf::RenderWindow& _window) : window(_window)
+WinScreen::WinScreen(sf::RenderWindow& _window)
+	: window(_window)
 {
 	textFontColor = sf::Color::White;
 
@@ -11,12 +12,20 @@ Gameover::Gameover(sf::RenderWindow& _window) : window(_window)
 	if (!mainTextFont.loadFromFile(PIXELOIDSANS_FILEPATH))
 		std::cout << "Could not load a font file!\n";
 
+	// Main text
 	mainText.setFont(mainTextFont);
-	mainText.setString("GAME OVER");
+	mainText.setString("YOU WON!");
 	mainText.setFillColor(sf::Color::Yellow);
 	mainText.setCharacterSize(64);
 	mainText.setStyle(sf::Text::Bold);
-	mainText.setPosition(((float)WINDOW_WIDTH / 2) - (mainText.getGlobalBounds().width / 2), 250.f);
+	mainText.setPosition(((float)WINDOW_WIDTH / 2) - (mainText.getGlobalBounds().width / 2), 200.f);
+
+	mainText2.setFont(mainTextFont);
+	mainText2.setString("Congratulations!");
+	mainText2.setFillColor(sf::Color::Yellow);
+	mainText2.setCharacterSize(42);
+	mainText2.setStyle(sf::Text::Bold);
+	mainText2.setPosition(((float)WINDOW_WIDTH / 2) - (mainText2.getGlobalBounds().width / 2), 270.f);
 
 	// localFont. Init
 	if (!localFont.loadFromFile(PIXELOIDSANS_FILEPATH))
@@ -27,7 +36,7 @@ Gameover::Gameover(sf::RenderWindow& _window) : window(_window)
 	playText.setFillColor(sf::Color::White);
 	playText.setCharacterSize(32);
 	playText.setStyle(sf::Text::Bold);
-	playText.setPosition(((float)WINDOW_WIDTH / 2) - (playText.getGlobalBounds().width / 2), WINDOW_HEIGHT - 250.f);
+	playText.setPosition(((float)WINDOW_WIDTH / 2) - (playText.getGlobalBounds().width / 2), WINDOW_HEIGHT - 300.f);
 
 	// quitText Init
 	quitText.setFont(localFont);
@@ -35,7 +44,7 @@ Gameover::Gameover(sf::RenderWindow& _window) : window(_window)
 	quitText.setFillColor(sf::Color::White);
 	quitText.setCharacterSize(24);
 	quitText.setStyle(sf::Text::Bold);
-	quitText.setPosition(100.f, WINDOW_HEIGHT - 250.f);
+	quitText.setPosition(100.f, WINDOW_HEIGHT - 300.f);
 
 	////// Score Init //////
 	// Player
@@ -71,7 +80,12 @@ Gameover::Gameover(sf::RenderWindow& _window) : window(_window)
 	timer.setPosition(((float)WINDOW_WIDTH / 2) - (timer.getGlobalBounds().width / 2), 550.f);
 }
 
-void Gameover::draw()
+WinScreen::~WinScreen()
+{
+
+}
+
+void WinScreen::draw()
 {
 	// Blinking playText
 	if (playTextVisible)
@@ -87,7 +101,7 @@ void Gameover::draw()
 	{
 		if (playTextClock.getElapsedTime().asSeconds() > textOffTime)
 		{
-			playText.setPosition(((float)WINDOW_WIDTH / 2) - (playText.getGlobalBounds().width / 2), WINDOW_HEIGHT - 250.f);
+			playText.setPosition(((float)WINDOW_WIDTH / 2) - (playText.getGlobalBounds().width / 2), WINDOW_HEIGHT - 300.f);
 			playTextVisible = !playTextVisible;
 			playTextClock.restart();
 		}
@@ -96,6 +110,7 @@ void Gameover::draw()
 	// Drawing
 	window.draw(background);
 	window.draw(mainText);
+	window.draw(mainText2);
 	window.draw(playText);
 	window.draw(quitText);
 	window.draw(player);
@@ -104,7 +119,7 @@ void Gameover::draw()
 	window.draw(timer);
 }
 
-void Gameover::setValues(std::string _pName, int _pScore, int _pCombo, int _gTimer)
+void WinScreen::setValues(std::string _pName, int _pScore, int _pCombo, int _gTimer)
 {
 	playerName = _pName;
 	playerScore = _pScore;

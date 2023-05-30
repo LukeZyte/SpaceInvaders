@@ -5,13 +5,12 @@ import Globals;
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <string>
 
-class Gameover
+class WinScreen
 {
 public:
-	Gameover(sf::RenderWindow& _window);
-	~Gameover() {};
+	WinScreen(sf::RenderWindow& _window);
+	~WinScreen();
 
 	void draw();
 	void setValues(std::string _pName, int _pScore, int _pCombo, int _gTimer);
@@ -22,6 +21,8 @@ private:
 	sf::RectangleShape background;
 	sf::Font mainTextFont;
 	sf::Text mainText;
+	sf::Font mainText2Font;
+	sf::Text mainText2;
 
 	sf::Color fontColor;
 	sf::Text playText;
@@ -43,5 +44,5 @@ private:
 	int playerScore = 0;
 	int playerMaxCombo = 0;
 	int gameTimer = 0;
-};
+};  
 
