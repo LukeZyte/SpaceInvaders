@@ -31,6 +31,7 @@ export
 	std::string WALL_2_FILEPATH = "resources/img/wall_2.png";
 	std::string WALL_1_FILEPATH = "resources/img/wall_1.png";
 	std::string SAFEAREA_FILEPATH = "resources/img/safearea.png";
+	std::string HP_FILEPATH = "resources/img/hp.png";
 
 	// Sounds
 	std::string CLICK_SOUND_FILEPATH = "resources/sounds/click.wav";

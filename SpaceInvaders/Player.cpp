@@ -42,3 +42,13 @@ bool Player::collisionCheck(GraphicalObject* bullet)
 	}
 	return false;
 }
+
+void Player::resetHP()
+{
+	HP = 3;
+}
+
+void Player::removeHP(int value)
+{
+	HP = HP - value;
+}

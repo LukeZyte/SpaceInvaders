@@ -101,7 +101,8 @@ private:
 	int combo = 0;
 	int maxCombo = 0;
 	int pointsForKill = 50;
-	int pointsForHittingWall = 100;
+	int pointsForGettingHit = 300;
+	//int pointsForHittingWall = 100;
 
 	std::string lastNickname = "";
 	std::string lastScore = "0";

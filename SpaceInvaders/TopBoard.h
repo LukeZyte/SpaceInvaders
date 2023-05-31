@@ -19,6 +19,7 @@ public:
 	void setScore(int value);
 	void setCombo(int value);
 	void setTimer(int value);
+	void setHP(int value);
 
 private:
 	sf::RenderWindow& window;
@@ -31,9 +32,15 @@ private:
 	sf::Text timer;
 	int fontSize = 24;
 
+	sf::Texture hpTex;
+	sf::Sprite hpSprite1;
+	sf::Sprite hpSprite2;
+	sf::Sprite hpSprite3;
+
 	std::string playerName = "";
 	int playerScore = 0;
 	int playerCombo = 0;
 	int gameTimer = 0;
+	int playerHP = 0;
 };
 

@@ -14,6 +14,7 @@ public:
 
 	void draw();
 	void setValues(std::string _pName, int _pScore, int _pCombo, int _gTimer);
+	void setNewRecord(bool _newRecord);
 
 private:
 	sf::RenderWindow& window;
@@ -44,5 +45,8 @@ private:
 	int playerScore = 0;
 	int playerMaxCombo = 0;
 	int gameTimer = 0;
+
+	bool newRecord = false;
+	sf::Text newRecordText;
 };  
 

@@ -42,6 +42,17 @@ TopBoard::TopBoard(sf::RenderWindow& _window) : window(_window)
 	timer.setCharacterSize(fontSize);
 	timer.setPosition((WINDOW_WIDTH / 2) - (timer.getGlobalBounds().width / 2), 40.f);
 
+	// HP
+	if (!hpTex.loadFromFile(HP_FILEPATH))
+	{
+		std::cout << "Could not load a hp texture file!\n";
+	}
+	hpSprite1.setTexture(hpTex);
+	hpSprite1.setPosition(WINDOW_WIDTH - (hpSprite1.getGlobalBounds().width) - 20 - 0, 40.f);
+	hpSprite2.setTexture(hpTex);
+	hpSprite2.setPosition(WINDOW_WIDTH - (hpSprite1.getGlobalBounds().width) - 20 - 29, 40.f);
+	hpSprite3.setTexture(hpTex);
+	hpSprite3.setPosition(WINDOW_WIDTH - (hpSprite1.getGlobalBounds().width) - 20 - 58, 40.f);
 }
 
 TopBoard::~TopBoard() {}
@@ -52,6 +63,19 @@ void TopBoard::draw()
 	window.draw(score);
 	window.draw(combo);
 	window.draw(timer);
+
+	if (playerHP > 0)
+	{
+		window.draw(hpSprite1);
+	}
+	if (playerHP > 1)
+	{
+		window.draw(hpSprite2);
+	}
+	if (playerHP > 2)
+	{
+		window.draw(hpSprite3);
+	}
 }
 
 void TopBoard::setName(std::string name)
@@ -80,4 +104,9 @@ void TopBoard::setTimer(int value)
 	gameTimer = value;
 	timer.setString(std::to_string(gameTimer));
 	timer.setPosition((WINDOW_WIDTH / 2) - (timer.getGlobalBounds().width / 2), 40.f);
+}
+
+void TopBoard::setHP(int value)
+{
+	playerHP = value;
 }

@@ -20,8 +20,11 @@ public:
 	sf::Vector2f getRifleBound();
 
 	bool collisionCheck(GraphicalObject* bullet);
+	void removeHP(int value);
+	void resetHP();
+	int getHP() { return HP; }
 
 private:
-
 	float moveSpeed = 500.f;
+	int HP = 3;
 };

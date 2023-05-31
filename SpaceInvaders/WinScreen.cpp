@@ -78,6 +78,14 @@ WinScreen::WinScreen(sf::RenderWindow& _window)
 	timer.setStyle(sf::Text::Regular);
 	timer.setCharacterSize(fontSize);
 	timer.setPosition(((float)WINDOW_WIDTH / 2) - (timer.getGlobalBounds().width / 2), 550.f);
+
+	// NewRecord Text
+	newRecordText.setFont(mainTextFont);
+	newRecordText.setString("NEW RECORD!");
+	newRecordText.setFillColor(sf::Color::Magenta);
+	newRecordText.setCharacterSize(36);
+	newRecordText.setStyle(sf::Text::Bold);
+	newRecordText.setPosition(((float)WINDOW_WIDTH / 2) - (newRecordText.getGlobalBounds().width / 2), 330.f);
 }
 
 WinScreen::~WinScreen()
@@ -117,6 +125,10 @@ void WinScreen::draw()
 	window.draw(score);
 	window.draw(combo);
 	window.draw(timer);
+	if (newRecord)
+	{
+		window.draw(newRecordText);
+	}
 }
 
 void WinScreen::setValues(std::string _pName, int _pScore, int _pCombo, int _gTimer)
@@ -134,4 +146,9 @@ void WinScreen::setValues(std::string _pName, int _pScore, int _pCombo, int _gTi
 	combo.setPosition(((float)WINDOW_WIDTH / 2) - (combo.getGlobalBounds().width / 2), 500.f);
 	timer.setString("TIME:  " + std::to_string(gameTimer));
 	timer.setPosition(((float)WINDOW_WIDTH / 2) - (timer.getGlobalBounds().width / 2), 550.f);
+}
+
+void WinScreen::setNewRecord(bool _newRecord)
+{
+	newRecord = _newRecord;
 }

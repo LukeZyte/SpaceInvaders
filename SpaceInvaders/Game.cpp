@@ -275,12 +275,15 @@ void Game::gameLoop()
 
 void Game::initGame()
 {
+    player->resetHP();
+    topBoard.setHP(player->getHP());
     resetScore();
     resetMaxCombo();
     resetCombo();
     topBoard.setScore(SCORE);
     gameTime.restart();
     enemyReloadClock.restart();
+    winScreen.setNewRecord(false);
 
     // Create enemies
     for (int i = 100; i <= 400; i = i + 70)
@@ -294,13 +297,15 @@ void Game::initGame()
 
     // Create walls
     Wall* wall1 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(100.f, WINDOW_HEIGHT - 150.f));
-    Wall* wall2 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(375.f, WINDOW_HEIGHT - 150.f));
-    Wall* wall3 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(675.f, WINDOW_HEIGHT - 150.f));
-    Wall* wall4 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(950.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall2 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(320.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall3 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(563.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall4 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(800.f, WINDOW_HEIGHT - 150.f));
+    Wall* wall5 = new Wall(&window, WALL_FULL_FILEPATH, sf::Vector2f(1020.f, WINDOW_HEIGHT - 150.f));
     wallsVec.push_back(wall1);
     wallsVec.push_back(wall2);
     wallsVec.push_back(wall3);
     wallsVec.push_back(wall4);
+    wallsVec.push_back(wall5);
 }
 
 void Game::eraseGame()
@@ -395,6 +400,7 @@ void Game::checkCollisions(sf::Clock gameTime)
                     if (SCORE > std::stoi(recordScore))
                     {
                         saveRecord(RECORD_FILEPATH);
+                        winScreen.setNewRecord(true);
                     }
                     saveRecord(LAST_RECORD_FILEPATH);
                 }
@@ -414,8 +420,18 @@ void Game::checkCollisions(sf::Clock gameTime)
     {
         if (player->collisionCheck(enemyBulletsVec[ie]))
         {
-            enemyBulletsVec[ie]->draw();
-            death();
+            sounds.playWrongSound();
+            player->removeHP(1);
+            topBoard.setHP(player->getHP());
+            removePoints(pointsForGettingHit);
+
+            if (player->getHP() == 0)
+            {
+                enemyBulletsVec[ie]->draw();
+                death();
+            }
+
+            enemyBulletsVec.erase(std::ranges::begin(enemyBulletsVec) + ie);
         }
     }
 
@@ -427,8 +443,7 @@ void Game::checkCollisions(sf::Clock gameTime)
             if (wallsVec[iw]->collisionCheck(playerBulletsVec[ib]))
             {
                 sounds.playWrongSound();
-                wallsVec[iw]->hit();
-                wallsVec[iw]->changeTexture();
+                wallsVec[iw]->destroy();
                 playerBulletsVec.erase(std::ranges::begin(playerBulletsVec) + ib);
                 if (wallsVec[iw]->getHP() == 0)
                 {
@@ -436,7 +451,7 @@ void Game::checkCollisions(sf::Clock gameTime)
                 }
                 resetCombo();
                 topBoard.setCombo(combo);
-                removePoints(pointsForHittingWall);
+                //removePoints(pointsForHittingWall);
                 topBoard.setScore(SCORE);
             }
         }
@@ -493,13 +508,13 @@ void Game::alienShots()
 
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    std::uniform_int_distribution<std::mt19937::result_type> distance(0, std::ranges::size(enemiesVec));
-    Enemy* randomAlien = enemiesVec[distance(gen)];
 
     // Alien shots
     if (enemyReloadClock.getElapsedTime().asSeconds() > enemyReloadTime)
     {
-        EnemyBullet* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, randomAlien->getRifleBound());
+        std::uniform_int_distribution<std::mt19937::result_type> distance(0, std::ranges::size(enemiesVec));
+        //Enemy* randomAlien = enemiesVec[distance(gen)];
+        EnemyBullet* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, enemiesVec[distance(gen)]->getRifleBound());
         enemyBulletsVec.push_back(bullet);
         enemyReloadClock.restart();
     }
@@ -519,13 +534,6 @@ void Game::checkAreaLine()
 
 void Game::addToScore(int value, sf::Clock gameTime)
 {
-    if (value > 0)
-    {
-        for (int i = 0; i < getGameTimeAsSec(); i = i + 3)  // -1 point every new 3s of the gameTime
-        {
-            value--;
-        }
-    }
     SCORE = SCORE + value + combo;
 }
 

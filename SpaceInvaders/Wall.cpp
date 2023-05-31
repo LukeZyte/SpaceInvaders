@@ -50,3 +50,8 @@ void Wall::hit()
 {
 	HP--;
 }
+
+void Wall::destroy()
+{
+	HP = 0;
+}

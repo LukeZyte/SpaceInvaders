@@ -16,6 +16,7 @@ public:
 
 	void hit();
 	void changeTexture();
+	void destroy();
 	int getHP() { return HP; }
 
 private:
