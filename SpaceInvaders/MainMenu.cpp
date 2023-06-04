@@ -2,8 +2,6 @@
 
 MainMenu::MainMenu(sf::RenderWindow& _window) : window(_window)
 {
-	std::cout << "Utworzono MainMenu obj!\n";
-
 	// Title Init
 	if (!titleFont.loadFromFile(PIXELOIDSANS_FILEPATH))
 		std::cout << "Could not load a font file!\n";
@@ -45,11 +43,19 @@ MainMenu::MainMenu(sf::RenderWindow& _window) : window(_window)
 	authorText.setStyle(sf::Text::Regular);
 
 	authorText.setPosition(20.f, WINDOW_HEIGHT - 20.f - authorText.getGlobalBounds().height);
+
+	// Lang Init
+	langText.setFont(playTextFont);
+	langText.setString("C++ / SFML");
+	langText.setFillColor(sf::Color(255, 255, 255, 180));
+	langText.setCharacterSize(16);
+	langText.setStyle(sf::Text::Regular);
+	
+	langText.setPosition(WINDOW_WIDTH - 20.f - langText.getGlobalBounds().width, WINDOW_HEIGHT - 20.f - langText.getGlobalBounds().height);
 }
 
 MainMenu::~MainMenu()
 {
-	std::cout << "Zniszczono MainMenu obj!\n";
 }
 
 void MainMenu::draw()
@@ -77,6 +83,7 @@ void MainMenu::draw()
 	// Drawing
 	window.draw(title);
 	window.draw(authorText);
+	window.draw(langText);
 	window.draw(playText);
 	window.draw(recordsText);
 }

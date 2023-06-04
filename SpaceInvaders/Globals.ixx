@@ -10,11 +10,11 @@ export
 	size_t FPS_LIMIT = 120;
 	std::string RECORD_FILEPATH = "saves\\record.txt";
 	std::string LAST_RECORD_FILEPATH = "saves\\lastRecord.txt";
-	
+
 	// Fonts
 	std::string PIXELOIDSANS_FILEPATH = "resources/font/PixeloidSans.ttf";
 	std::string PRESSSTART2P_FILEPATH = "resources/font/PressStart2P.ttf";
-	
+
 	// Textures
 	std::string SPACE_BACKGROUND_FILEPATH = "resources/img/space_bg.jpg";
 	std::string PLAYER_MODEL_FILEPATH = "resources/img/PlayerTexture.png";
@@ -22,7 +22,6 @@ export
 	std::string BULLET_LIGHT_FILEPATH = "resources/img/bullet_light.png";
 	std::string ALIENTEXTURE_MODEL_FILEPATH = "resources/img/AlienTexture.png";
 	std::string ALIENTEXUTRE_2_MODEL_FILEPATH = "resources/img/AlienTexture2.png";
-	std::string ENEMY_DEAD_MODEL_FILEPATH = "resources/img/AlienDestroyedTexture.png";
 	std::string ENEMYBULLET_FILEPATH = "resources/img/enemyBullet.png";
 	std::string ENEMYBULLET_LIGHT_FILEPATH = "resources/img/enemyBullet2.png";
 	std::string WALL_FULL_FILEPATH = "resources/img/wall_full.png";

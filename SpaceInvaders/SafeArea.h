@@ -1,12 +1,12 @@
 #pragma once
 
 #include "GraphicalObject.h"
-//#include "Globals.h"
-import Globals;
 #include "Enemy.h"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
+import Globals;
 
 class SafeArea :
     public GraphicalObject

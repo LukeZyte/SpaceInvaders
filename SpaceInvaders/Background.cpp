@@ -3,8 +3,6 @@
 
 Background::Background(sf::RenderWindow& _window) : window(_window)
 {
-	std::cout << "Utworzono Background obj!\n";
-
 	// Background Init
 	texture.loadFromFile(SPACE_BACKGROUND_FILEPATH);
 	background.setTexture(texture);
@@ -15,7 +13,6 @@ Background::Background(sf::RenderWindow& _window) : window(_window)
 
 Background::~Background()
 {
-	std::cout << "Zniszczono Background obj!\n";
 }
 
 void Background::draw()
@@ -31,8 +28,8 @@ void Background::moveBackgorund(sf::Time& dt, float gameSpeed)
 		bgMoveSpeed = bgMoveSpeed + acceleration;
 	}
 
-	background.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5);
-	background2.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5);
+	background.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5f);
+	background2.move(0.f, bgMoveSpeed * dt.asSeconds() * gameSpeed * 1.5f);
 
 	// repeating the bg as it moves
 	if (background.getGlobalBounds().top > WINDOW_HEIGHT)

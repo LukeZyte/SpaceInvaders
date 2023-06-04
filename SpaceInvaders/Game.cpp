@@ -3,26 +3,34 @@
 Game::Game(sf::RenderWindow& _window) 
     : window(_window), gameState("menu")
 {
-    std::cout << "Game window addr: " << &window << "\n";
-
     gameLoop();
 }
 
 Game::~Game()
 {
-    std::cout << "Usunieto instancje Game z Game.h\n";
+    eraseGame();
+    delete sounds;
+    delete mainMenu;
+    delete gameover;
+    delete topBoard;
+    delete winScreen;
+    delete recordsScreen;
+    delete nicknameScreen;
+    delete player;
+    delete background;
+    delete safeAreaLine;
 }
 
 void Game::draw(sf::Time& dt, sf::Clock gameTime)
 {
     if (gameState == "menu")
     {
-        mainMenu.draw();
+        mainMenu->draw();
         player->draw();
     }
     else if (gameState == "nickname")
     {
-        nicknameScreen.draw();
+        nicknameScreen->draw();
     }
     else if (gameState == "game")
     {
@@ -35,7 +43,7 @@ void Game::draw(sf::Time& dt, sf::Clock gameTime)
         alienShots();
         checkCollisions(gameTime);
         checkAreaLine();
-        topBoard.draw();
+        topBoard->draw();
     }
     else if (gameState == "gameover")
     {
@@ -45,19 +53,19 @@ void Game::draw(sf::Time& dt, sf::Clock gameTime)
         drawWalls();
         alienShots();
         checkCollisions(gameTime);
-        gameover.draw();
+        gameover->draw();
     }
     else if (gameState == "win")
     {
         background->draw();
         player->draw();
-        winScreen.draw();
+        winScreen->draw();
     }
     else if (gameState == "records")
     {
         background->draw();
         player->draw();
-        recordsScreen.draw();
+        recordsScreen->draw();
     }
 }
 
@@ -123,34 +131,34 @@ void Game::gameLoop()
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 gameState = "nickname";
-                nicknameScreen.resetNickname();
+                nicknameScreen->resetNickname();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 getLastRecord(LAST_RECORD_FILEPATH);
                 getRecord(RECORD_FILEPATH);
 
                 if (lastNickname.size() < 3)
                 {
-                    recordsScreen.setUnavailableLastRecord();
+                    recordsScreen->setUnavailableLastRecord();
                 }
                 else
                 {
-                    recordsScreen.setAvailableLastRecord();
-                    recordsScreen.setLastValues(lastNickname, lastScore, lastMaxCombo, lastTime);
+                    recordsScreen->setAvailableLastRecord();
+                    recordsScreen->setLastValues(lastNickname, lastScore, lastMaxCombo, lastTime);
                 }
 
                 if (recordNickname.size() < 3)
                 {
-                    recordsScreen.setUnavailableBestRecord();
+                    recordsScreen->setUnavailableBestRecord();
                 }
                 else
                 {
-                    recordsScreen.setAvailableBestRecord();
-                    recordsScreen.setRecordValues(recordNickname, recordScore, recordMaxCombo, recordTime);
+                    recordsScreen->setAvailableBestRecord();
+                    recordsScreen->setRecordValues(recordNickname, recordScore, recordMaxCombo, recordTime);
                 }
                 gameState = "records";
             }
@@ -159,7 +167,7 @@ void Game::gameLoop()
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 gameState = "menu";
             }
         }
@@ -167,29 +175,29 @@ void Game::gameLoop()
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
             {
-                if (nicknameScreen.getNickname().size() > 2)
+                if (nicknameScreen->getNickname().size() > 2)
                 {
                     initGame();
                     gameState = "game";
-                    setPlayerName(nicknameScreen.getNickname());
+                    setPlayerName(nicknameScreen->getNickname());
                     lockMovement = false;
                 }
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 gameState = "menu";
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Backspace) && !lockKey)
             {
                 lockMovement = true;
-                nicknameScreen.updateNickname();
+                nicknameScreen->updateNickname();
             }
             if (event.type == sf::Event::TextEntered && !lockKey && !sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
             {
                 lockKey = true;
-                nicknameScreen.updateNickname(event);
+                nicknameScreen->updateNickname(event);
             }
             if (event.type == sf::Event::KeyReleased && lockKey)
             {
@@ -199,8 +207,8 @@ void Game::gameLoop()
         else if (gameState == "game")
         {
             // Init game topboard values
-            topBoard.setName(playerName);
-            topBoard.setTimer(getGameTimeAsSec());
+            topBoard->setName(playerName);
+            topBoard->setTimer(getGameTimeAsSec());
 
             if (!lockMovement)
             {
@@ -225,7 +233,7 @@ void Game::gameLoop()
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 eraseGame();
                 initGame();
                 gameState = "game";
@@ -234,7 +242,7 @@ void Game::gameLoop()
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 eraseGame();
                 gameState = "menu";
                 lockMovement = true;
@@ -245,7 +253,7 @@ void Game::gameLoop()
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 eraseGame();
                 initGame();
                 gameState = "game";
@@ -254,7 +262,7 @@ void Game::gameLoop()
             }
             else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
-                sounds.playClickSound();
+                sounds->playClickSound();
                 eraseGame();
                 gameState = "menu";
                 lockMovement = true;
@@ -276,14 +284,14 @@ void Game::gameLoop()
 void Game::initGame()
 {
     player->resetHP();
-    topBoard.setHP(player->getHP());
+    topBoard->setHP(player->getHP());
     resetScore();
     resetMaxCombo();
     resetCombo();
-    topBoard.setScore(SCORE);
+    topBoard->setScore(SCORE);
     gameTime.restart();
     enemyReloadClock.restart();
-    winScreen.setNewRecord(false);
+    winScreen->setNewRecord(false);
 
     // Create enemies
     for (int i = 100; i <= 400; i = i + 70)
@@ -325,7 +333,7 @@ void Game::playerShots()
 {
     Bullet* bullet = new Bullet(&window, BULLET_FILEPATH, BULLET_LIGHT_FILEPATH, player->getRifleBound());
     playerBulletsVec.push_back(bullet);
-    sounds.playShootingSound();
+    sounds->playShootingSound();
 
     //std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
 }
@@ -339,7 +347,7 @@ void Game::eraseBullets()
         {
             playerBulletsVec.erase(std::ranges::begin(playerBulletsVec) + i);
             resetCombo();
-            topBoard.setCombo(combo);
+            topBoard->setCombo(combo);
             //std::cout << "bulletsVec size: " << playerBulletsVec.size() << "\n";
             break;
         }
@@ -382,7 +390,7 @@ void Game::checkCollisions(sf::Clock gameTime)
         {
             if (enemiesVec[ie]->collisionCheck(playerBulletsVec[ib]))
             {
-                sounds.playExplosionSound();
+                sounds->playExplosionSound();
                 //std::cout << "enemiesVecSize: " << enemiesVec.size() << std::endl;
                 playerBulletsVec.erase(std::ranges::begin(playerBulletsVec) + ib);
                 enemiesVec.erase(std::ranges::begin(enemiesVec) + ie);
@@ -392,25 +400,25 @@ void Game::checkCollisions(sf::Clock gameTime)
                 {
                     lockMovement = true;
                     gameState = "win";
-                    winScreen.setValues(playerName, SCORE, maxCombo, getGameTimeAsSec());
-                    sounds.playWinSound();
+                    winScreen->setValues(playerName, SCORE, maxCombo, getGameTimeAsSec());
+                    sounds->playWinSound();
 
                     // Check if its a new record
                     getRecord(RECORD_FILEPATH);
                     if (SCORE > std::stoi(recordScore))
                     {
                         saveRecord(RECORD_FILEPATH);
-                        winScreen.setNewRecord(true);
+                        winScreen->setNewRecord(true);
                     }
                     saveRecord(LAST_RECORD_FILEPATH);
                 }
 
                 // Speed up the game
-                gameSpeed = gameSpeed * 1.04;
+                gameSpeed = gameSpeed * 1.04f;
                 addToScore(pointsForKill, gameTime);
-                topBoard.setScore(SCORE);
+                topBoard->setScore(SCORE);
                 addCombo();
-                topBoard.setCombo(combo);
+                topBoard->setCombo(combo);
             }
         }
     }
@@ -420,15 +428,18 @@ void Game::checkCollisions(sf::Clock gameTime)
     {
         if (player->collisionCheck(enemyBulletsVec[ie]))
         {
-            sounds.playWrongSound();
             player->removeHP(1);
-            topBoard.setHP(player->getHP());
+            topBoard->setHP(player->getHP());
             removePoints(pointsForGettingHit);
 
             if (player->getHP() == 0)
             {
                 enemyBulletsVec[ie]->draw();
                 death();
+            }
+            else
+            {
+                sounds->playWrongSound();
             }
 
             enemyBulletsVec.erase(std::ranges::begin(enemyBulletsVec) + ie);
@@ -442,7 +453,7 @@ void Game::checkCollisions(sf::Clock gameTime)
         {
             if (wallsVec[iw]->collisionCheck(playerBulletsVec[ib]))
             {
-                sounds.playWrongSound();
+                sounds->playWrongSound();
                 wallsVec[iw]->destroy();
                 playerBulletsVec.erase(std::ranges::begin(playerBulletsVec) + ib);
                 if (wallsVec[iw]->getHP() == 0)
@@ -450,9 +461,9 @@ void Game::checkCollisions(sf::Clock gameTime)
                     wallsVec.erase(std::ranges::begin(wallsVec) + iw);
                 }
                 resetCombo();
-                topBoard.setCombo(combo);
+                topBoard->setCombo(combo);
                 //removePoints(pointsForHittingWall);
-                topBoard.setScore(SCORE);
+                topBoard->setScore(SCORE);
             }
         }
         for (int ib = 0; ib < std::ranges::size(enemyBulletsVec); ib++)
@@ -475,9 +486,8 @@ void Game::death()
 {
     if (!lockMovement)
     {
-        gameover.setValues(playerName, SCORE, maxCombo, getGameTimeAsSec());
-        saveRecord(LAST_RECORD_FILEPATH);
-        sounds.playGameoverSound();
+        gameover->setValues(playerName, SCORE, maxCombo, getGameTimeAsSec());
+        sounds->playGameoverSound();
     }
     lockMovement = true;
     gameState = "gameover";
@@ -513,8 +523,8 @@ void Game::alienShots()
     if (enemyReloadClock.getElapsedTime().asSeconds() > enemyReloadTime)
     {
         std::uniform_int_distribution<std::mt19937::result_type> distance(0, std::ranges::size(enemiesVec));
-        //Enemy* randomAlien = enemiesVec[distance(gen)];
-        EnemyBullet* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, enemiesVec[distance(gen)]->getRifleBound());
+        Enemy* randomAlien = enemiesVec[distance(gen)];
+        EnemyBullet* bullet = new EnemyBullet(&window, ENEMYBULLET_FILEPATH, ENEMYBULLET_LIGHT_FILEPATH, randomAlien->getRifleBound());
         enemyBulletsVec.push_back(bullet);
         enemyReloadClock.restart();
     }
@@ -544,7 +554,7 @@ void Game::resetScore()
 
 int Game::getGameTimeAsSec()
 {
-    return gameTime.getElapsedTime().asSeconds();
+    return (int)gameTime.getElapsedTime().asSeconds();
 }
 
 void Game::addCombo()

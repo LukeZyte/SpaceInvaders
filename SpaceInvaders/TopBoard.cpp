@@ -2,8 +2,6 @@
 
 TopBoard::TopBoard(sf::RenderWindow& _window) : window(_window)
 {
-	std::cout << "Utworzono MainMenu obj!\n";
-
 	fontColor = sf::Color::White;
 
 	// LocalFont Init

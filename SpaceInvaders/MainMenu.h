@@ -1,10 +1,9 @@
 #pragma once
 
-//#include "Globals.h"
-import Globals;
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
+
+import Globals;
 
 class MainMenu
 {
@@ -17,19 +16,18 @@ public:
 private:
 	sf::RenderWindow& window;
 
-	//sf::Texture texture;
-	//sf::Sprite background;
 	sf::Font titleFont;
 	sf::Text title;
 	sf::Text authorText;
+	sf::Text langText;
 
 	sf::Font playTextFont;
 	sf::Text playText;
 	sf::Text recordsText;
 	bool playTextVisible = true;
 	sf::Clock playTextClock;
-	float textOnTime = 1.5;
-	float textOffTime = 0.8;
+	float textOnTime = 1.5f;
+	float textOffTime = 0.8f;
 
 };
 

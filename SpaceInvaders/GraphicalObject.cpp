@@ -7,8 +7,6 @@ GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texture
 	textures[0].loadFromFile(texturePath);
 	textures[1].loadFromFile(texturePath);
 	sprite.setTexture(textures[textureFrameIndex]);
-	
-	//resetPosition();
 }
 
 GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texturePath, std::string _texturePath2, sf::Vector2f _initPosition)
@@ -18,8 +16,6 @@ GraphicalObject::GraphicalObject(sf::RenderWindow* _window, std::string _texture
 	textures[0].loadFromFile(_texturePath);
 	textures[1].loadFromFile(_texturePath2);
 	sprite.setTexture(textures[textureFrameIndex]);
-
-	//resetPosition();
 }
 
 GraphicalObject::~GraphicalObject()

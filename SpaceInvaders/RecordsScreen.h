@@ -1,10 +1,10 @@
 #pragma once
 
-import Globals;
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+
+import Globals;
 
 class RecordsScreen
 {

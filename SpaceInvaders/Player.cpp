@@ -3,13 +3,11 @@
 Player::Player(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _initPosition)
 	: GraphicalObject(_window, _texturePath, _initPosition)
 {
-	std::cout << "Utworzono Player obj!\n";
 	resetPosition();
 }
 
 Player::~Player()
 {
-	std::cout << "Zniszczono Player obj!\n";
 }
 
 void Player::moveEntityLeft(sf::Time& dt, float gameSpeed)

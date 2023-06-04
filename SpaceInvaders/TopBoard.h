@@ -1,12 +1,11 @@
 #pragma once
 
-//#include "Globals.h"
-import Globals;
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 #include <algorithm>
+
+import Globals;
 
 class TopBoard
 {

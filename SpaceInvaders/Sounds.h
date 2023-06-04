@@ -1,9 +1,9 @@
 #pragma once
 
-import Globals;
-
 #include <iostream>
 #include <SFML/Audio.hpp>
+
+import Globals;
 
 class Sounds
 {

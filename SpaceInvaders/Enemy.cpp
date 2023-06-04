@@ -4,14 +4,12 @@ Enemy::Enemy(sf::RenderWindow* _window, std::string _texturePath, sf::Vector2f _
 	: GraphicalObject(_window, _texturePath, _initPosition)
 {
 	resetPosition();
-	deathTexture.loadFromFile(ENEMY_DEAD_MODEL_FILEPATH);
 }
 
 Enemy::Enemy(sf::RenderWindow* _window, std::string _texturePath, std::string _texturePath2, sf::Vector2f _initPosition)
 	: GraphicalObject(_window, _texturePath, _texturePath2, _initPosition)
 {
 	resetPosition();
-	deathTexture.loadFromFile(ENEMY_DEAD_MODEL_FILEPATH);
 }
 
 Enemy::~Enemy()

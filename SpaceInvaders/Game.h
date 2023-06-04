@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "Globals.h"
-import Globals;
 #include "MainMenu.h"
 #include "Player.h"
 #include "GraphicalObject.h"
@@ -18,7 +16,6 @@ import Globals;
 #include "RecordsScreen.h"
 #include "Sounds.h"
 
-#include <algorithm>
 #include <random>
 #include <iterator>
 #include <vector>
@@ -27,6 +24,8 @@ import Globals;
 #include <ranges>
 #include <fstream>
 #include <filesystem>
+
+import Globals;
 
 class Game
 {
@@ -79,13 +78,13 @@ private:
 
 	// Inits
 	sf::RenderWindow& window;
-	Sounds sounds;
-	MainMenu mainMenu{ window };
-	Gameover gameover{ window };
-	TopBoard topBoard{ window };
-	WinScreen winScreen{ window };
-	RecordsScreen recordsScreen{ window };
-	NicknameScreen nicknameScreen{ window };
+	Sounds* sounds = new Sounds();
+	MainMenu* mainMenu = new MainMenu(window);
+	Gameover* gameover = new Gameover(window);
+	TopBoard* topBoard = new TopBoard(window);
+	WinScreen* winScreen = new WinScreen(window);
+	RecordsScreen* recordsScreen = new RecordsScreen(window);
+	NicknameScreen* nicknameScreen = new NicknameScreen(window);
 	Player* player = new Player(&window, PLAYER_MODEL_FILEPATH, sf::Vector2f(WINDOW_WIDTH / 2 - 30.f, WINDOW_HEIGHT - 70.f));
 	Background* background = new Background(window);
 	SafeArea* safeAreaLine = new SafeArea(&window, SAFEAREA_FILEPATH, sf::Vector2f(0.f, 840.f));
@@ -116,14 +115,14 @@ private:
 
 	// Utils
 	sf::Clock reloadClock;
-	float reloadTime = 0.5;
+	float reloadTime = 0.5f;
 	sf::Clock enemyReloadClock;
-	float enemyReloadTime = 0.8;
+	float enemyReloadTime = 0.8f;
 	sf::Clock enemyDeathAnimationClock;
 	sf::Clock enemiesAnimationClock;
-	float enemiesAnimationTimer = 0.6;
+	float enemiesAnimationTimer = 0.6f;
 	sf::Clock bulletsAnimationClock;
-	float bulletsAnimationTimer = 0.05;
+	float bulletsAnimationTimer = 0.05f;
 	sf::Clock gameTime;
 };
 

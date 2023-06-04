@@ -2,12 +2,12 @@
 
 #include "GraphicalObject.h"
 #include "Bullet.h"
-//#include "Globals.h"
-import Globals;
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+
+import Globals;
 
 class Enemy : public GraphicalObject
 {
@@ -25,7 +25,6 @@ public:
 
 private:
 
-	sf::Texture deathTexture;
 	float moveSpeed = 50.f;
 	bool moveRight = true;
 

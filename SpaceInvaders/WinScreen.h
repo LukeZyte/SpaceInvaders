@@ -1,10 +1,9 @@
 #pragma once
 
-//#include "Globals.h"
-import Globals;
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
+import Globals;
 
 class WinScreen
 {
@@ -30,8 +29,8 @@ private:
 	sf::Text quitText;
 	bool playTextVisible = true;
 	sf::Clock playTextClock;
-	float textOnTime = 1.5;
-	float textOffTime = 0.8;
+	float textOnTime = 1.5f;
+	float textOffTime = 0.8f;
 
 	sf::Color textFontColor;
 	sf::Font localFont;

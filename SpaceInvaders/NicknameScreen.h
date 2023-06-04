@@ -1,12 +1,12 @@
 #pragma once
 
-//#include "Globals.h"
-import Globals;
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <regex>
 #include <cctype>
+
+import Globals;
 
 class NicknameScreen
 {

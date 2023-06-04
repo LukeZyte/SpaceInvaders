@@ -1,11 +1,10 @@
 #pragma once
 
-//#include "Globals.h"
-import Globals;
-
 #include <iostream>
 #include <array>
 #include <SFML/Graphics.hpp>
+
+import Globals;
 
 class GraphicalObject
 {
