@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game(sf::RenderWindow& _window) 
-    : window(_window), gameState("menu")
+    : window(_window), gameState(_menu)
 {
     gameLoop();
 }
@@ -23,16 +23,16 @@ Game::~Game()
 
 void Game::draw(sf::Time& dt, sf::Clock gameTime)
 {
-    if (gameState == "menu")
+    if (gameState == _menu)
     {
         mainMenu->draw();
         player->draw();
     }
-    else if (gameState == "nickname")
+    else if (gameState == _nickname)
     {
         nicknameScreen->draw();
     }
-    else if (gameState == "game")
+    else if (gameState == _game)
     {
         clocksHandler();
         background->draw();
@@ -45,7 +45,7 @@ void Game::draw(sf::Time& dt, sf::Clock gameTime)
         checkAreaLine();
         topBoard->draw();
     }
-    else if (gameState == "gameover")
+    else if (gameState == _gameover)
     {
         background->draw();
         player->draw();
@@ -55,13 +55,13 @@ void Game::draw(sf::Time& dt, sf::Clock gameTime)
         checkCollisions(gameTime);
         gameover->draw();
     }
-    else if (gameState == "win")
+    else if (gameState == _win)
     {
         background->draw();
         player->draw();
         winScreen->draw();
     }
-    else if (gameState == "records")
+    else if (gameState == _records)
     {
         background->draw();
         player->draw();
@@ -127,12 +127,12 @@ void Game::gameLoop()
             }
         }
 
-        if (gameState == "menu")
+        if (gameState == _menu)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
                 sounds->playClickSound();
-                gameState = "nickname";
+                gameState = _nickname;
                 nicknameScreen->resetNickname();
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
@@ -160,25 +160,25 @@ void Game::gameLoop()
                     recordsScreen->setAvailableBestRecord();
                     recordsScreen->setRecordValues(recordNickname, recordScore, recordMaxCombo, recordTime);
                 }
-                gameState = "records";
+                gameState = _records;
             }
         }
-        else if (gameState == "records")
+        else if (gameState == _records)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
                 sounds->playClickSound();
-                gameState = "menu";
+                gameState = _menu;
             }
         }
-        else if (gameState == "nickname")
+        else if (gameState == _nickname)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
             {
                 if (nicknameScreen->getNickname().size() > 2)
                 {
                     initGame();
-                    gameState = "game";
+                    gameState = _game;
                     setPlayerName(nicknameScreen->getNickname());
                     lockMovement = false;
                 }
@@ -186,7 +186,7 @@ void Game::gameLoop()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             {
                 sounds->playClickSound();
-                gameState = "menu";
+                gameState = _menu;
             }
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Backspace) && !lockKey)
@@ -204,7 +204,7 @@ void Game::gameLoop()
                 lockKey = false;
             }
         }
-        else if (gameState == "game")
+        else if (gameState == _game)
         {
             // Init game topboard values
             topBoard->setName(playerName);
@@ -229,14 +229,14 @@ void Game::gameLoop()
                 }
             }
         }
-        else if (gameState == "gameover")
+        else if (gameState == _gameover)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
             {
                 sounds->playClickSound();
                 eraseGame();
                 initGame();
-                gameState = "game";
+                gameState = _game;
                 lockMovement = false;
                 gameSpeed = 1.f;
             }
@@ -244,19 +244,19 @@ void Game::gameLoop()
             {
                 sounds->playClickSound();
                 eraseGame();
-                gameState = "menu";
+                gameState = _menu;
                 lockMovement = true;
                 gameSpeed = 1.f;
             }
         }
-        else if (gameState == "win")
+        else if (gameState == _win)
         {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
             {
                 sounds->playClickSound();
                 eraseGame();
                 initGame();
-                gameState = "game";
+                gameState = _game;
                 lockMovement = false;
                 gameSpeed = 1.f;
             }
@@ -264,7 +264,7 @@ void Game::gameLoop()
             {
                 sounds->playClickSound();
                 eraseGame();
-                gameState = "menu";
+                gameState = _menu;
                 lockMovement = true;
                 gameSpeed = 1.f;
             }
@@ -399,7 +399,7 @@ void Game::checkCollisions(sf::Clock gameTime)
                 if (std::ranges::empty(enemiesVec))
                 {
                     lockMovement = true;
-                    gameState = "win";
+                    gameState = _win;
                     winScreen->setValues(playerName, SCORE, maxCombo, getGameTimeAsSec());
                     sounds->playWinSound();
 
@@ -490,7 +490,7 @@ void Game::death()
         sounds->playGameoverSound();
     }
     lockMovement = true;
-    gameState = "gameover";
+    gameState = _gameover;
 }
 
 void Game::animateAliens()

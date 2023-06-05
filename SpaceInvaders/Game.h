@@ -27,6 +27,16 @@
 
 import Globals;
 
+enum gameState
+{
+	_menu = 0,
+	_game = 1,
+	_gameover = 2,
+	_win = 3,
+	_records = 4,
+	_nickname = 5
+};
+
 class Game
 {
 public:
@@ -90,7 +100,9 @@ private:
 	SafeArea* safeAreaLine = new SafeArea(&window, SAFEAREA_FILEPATH, sf::Vector2f(0.f, 840.f));
 
 	// States and Vars
-	std::string gameState;
+	//std::string gameState;
+	gameState gameState = _menu;
+
 	bool lockMovement = true;
 	float gameSpeed = 1;
 	std::string playerName = "PLAYER";
