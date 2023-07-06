@@ -14,9 +14,9 @@ Also you must have necessary files in the same folder as SpaceInvaders.exe.
 - SpaceInvaders.exe
 
 ## Screenshots
-![si1](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/2f575de0-8567-4354-8919-19357a1d4618)
-![si2](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/08f8aee5-9934-4861-a2ad-95acc36f3cae)
-![si3](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/7358297a-560e-473d-a7b8-cfe64deac69f)
-![si4](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/524052c4-c57b-428b-bc14-2dcee1be7637)
-![si5](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/f22df46c-7dc9-42ca-9b96-3a065df6044b)
-![si6](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/df55f376-f9b8-427b-bb34-47580c4d269c)
+![si1](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/1cd885c1-0252-4889-8671-4045c8330483)
+![si2](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/75ff2f5b-c391-4177-812f-7628e1542cf2)
+![si3](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/d6a7a771-488c-4694-bb76-f6fcb0cb3231)
+![si4](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/c1f83cfb-17bd-4390-a83d-d7fa6ab7f5de)
+![si5](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/1403fcd3-2cb8-4b1b-b362-b81cea0af126)
+![si6](https://github.com/LukeZyte/SpaceInvaders/assets/65601392/6625a30a-351b-4ee4-8aad-8aa22acc75af)
